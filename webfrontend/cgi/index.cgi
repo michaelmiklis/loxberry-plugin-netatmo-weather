@@ -14,7 +14,6 @@ use Cwd 'abs_path';
 use IO::Socket::INET;
 use HTML::Entities;
 use String::Escape qw( unquotemeta );
-use JSON qw( decode_json );
 use warnings;
 use strict;
 no strict "refs"; # we need it for template system

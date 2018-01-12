@@ -30,6 +30,7 @@ def main():
     miniservername = pluginconfig.get('NETATMO', 'MINISERVER')
     virtualUDPPort = int(pluginconfig.get('NETATMO', 'UDPPORT'))
 
+
     # ---------------------------------------------
     # Parse Loxberry config file
     # ---------------------------------------------
@@ -49,6 +50,11 @@ def main():
     # start new request session
     # ---------------------------------------------
     session = requests.Session()
+
+    # ---------------------------------------------
+    # set User-Agent to emulate Windows 10 / IE 11
+    # ---------------------------------------------
+    session.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'}
 
     # ---------------------------------------------
     # connect to netatmo website and grab a session cookie
@@ -125,6 +131,15 @@ def main():
     # ---------------------------------------------
     for device in netatmodata["body"]["devices"]:
 
+        # ---------------------------------------------
+        # Get WiFi Signal
+        # ---------------------------------------------
+        value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], "wifi_status", str(device["wifi_status"]))
+
+        # send udp datagram
+        sendudp(value, miniserverIP, virtualUDPPort);
+
+
         # Loop for each sensor in station
         for sensor in device["dashboard_data"].keys():
 
@@ -137,6 +152,7 @@ def main():
             # send udp datagram
             sendudp(value, miniserverIP, virtualUDPPort);
 
+
         for module in device["modules"]:
 
             # ---------------------------------------------
@@ -148,7 +164,7 @@ def main():
             sendudp(value, miniserverIP, virtualUDPPort);
 
             # ---------------------------------------------
-            # Get WiFi signal quality
+            # Get RF signal quality
             # ---------------------------------------------
             value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "rf_status", str(module["rf_status"]))
 
@@ -188,7 +204,7 @@ def sendudp(data, destip, destport):
     connection.close()
 
     # check if all bytes in resultstr were sent
-    if res != data.__len__():
+    if res != data.encode().__len__():
         log("Sent bytes do not match - expected {0} : got {1}".format(data.__len__(), res), "ERROR")
         log("Packet-Payload {0}".format(data), "ERROR")
         sys.exit(-1)

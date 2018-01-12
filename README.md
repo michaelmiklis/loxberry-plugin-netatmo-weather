@@ -45,6 +45,13 @@ Der Batterie-Level wird ab Version 0.6. in [Stationsname].[Modulname].battery_vp
 - 4360 = low
 - < 4360 = very low
 
+## WiFi Signalstärke
+Die WiFi-Signalstärke wird ab Version 0.10. in [Stationsname].[Modulname].wifi_status übermittelt. Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
+
+- 86 = bad
+- 71 = average
+- 56 = good
+
 ## Funk Signalstärke
 Die Funk-Signalstärke zwischen der Basisstation und den Modulen wird ab Version 0.6. in [Stationsname].[Modulname].rf_status übermittelt. Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
 
@@ -59,6 +66,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
+- 2017-06-14 Release 0.10 - wifi_status hinzugefügt, Umlaute-Problem   behoben, JSON in Webfrontend entfernt, User-Agent eingebaut
 - 2017-04-01 Release 0.9 - weitere Timestamp Werte angepasst - Bugfixing 
 - 2017-03-30 Release 0.8 - time_utc, date_min_temp,    date_max_temp in normalem Timestamp Format dd.mm.YYYY HH:MM:SS Format   
 - 2017-03-25 Release 0.7 - Bug-Fix für dynamische Pfade in Webfrontend CGI und    Umbennenung nach Netatmo-Weather 
