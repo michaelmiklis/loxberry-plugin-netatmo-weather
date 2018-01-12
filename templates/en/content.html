@@ -1,0 +1,100 @@
+
+<div role=\"main\" class=\"ui-content\">
+<div class=\"ui-body ui-body-a ui-corner-all loxberry-logo\">
+<div style=\"margin: 5%;\">
+
+<h2>Settings</h2>
+									<form method="post" data-ajax="false" name="main_form" id="main_form" action="./index.cgi">
+										<input type="hidden" name="savedata" id="savedata" value="1">
+											<div class="form-group">
+												<table class="formtable" border="0" width="100%">
+													<tr>
+														<td width="25%">
+															<label id="labelusername">Netatmo Username:</label>
+														</td>
+														<td width="50%">
+															<input id="username" name="username" type="text" class="textfield"
+																value="<!--$username-->" data-validation-error-msg="* Please enter your Netatmo username">
+														</td>
+														<td width="25%">
+															&nbsp;
+														</td>
+													</tr>
+													<tr>
+														<td width="25%">
+															<label id="labelpassword">Netatmo Password:</label>
+														</td>
+														<td width="50%">
+															<input id="password" name="password" type="password" class="textfield"
+																value="<!--$password-->" data-validation-error-msg="* Please enter your Netatmo password">
+														</td>
+														<td width="25%">
+															&nbsp;
+														</td>
+													</tr>
+													<tr>
+														<td width="25%">
+															<label id="labelfbpass">Miniserver:</label>
+														</td>
+														<td width="50%">
+															<select id="miniserver" name="miniserver" data-mini="true" onchange="selMS(this);">
+																<!--$MSselectlist-->
+															</select>
+														</td>
+														<td width="25%">
+															&nbsp;
+														</td>
+													</tr>
+													<tr>
+														<td width="25%">
+															<label id="labelmsudpport">MiniServer UDP-Port:</label>
+														</td>
+														<td width="50%">
+															<input id="msudpport" name="msudpport" type="text" class="textfield"
+																value="<!--$msudpport-->" data-validation-error-msg="* Please enter a MiniServer UDP-Port">
+														</td>
+														<td width="25%">
+															&nbsp;
+														</td>
+													</tr>
+													
+													<tr>
+														<td width="25%">
+															<label id="labelmsenabled">Enable this Plugin:</label>
+														</td>
+														<td width="50%">
+														<fieldset onclick="enablesubmit()">
+																<select id="enabled" name="enabled" data-role="flipswitch">
+																	<!--$Enabledlist-->
+																</select>
+															</fieldset>
+														</td>
+														<td width="25%">
+															&nbsp;
+														</td>
+													</tr>
+													<tr>
+														<td width="25%">&nbsp</td>
+														<td width="50%">
+															<input id="do" name="do" type="submit" value="Save">
+														</td>
+														<td width="25%">
+															&nbsp;
+														</td>
+													</tr>		
+											</table>
+										</div>
+									</form>
+<!--$restartMsg-->
+
+
+<script>
+		var $messages = $('#form-error-message');
+		$.validate({
+			modules : 'security',
+			errorMessagePosition : $messages,
+		});
+</script>
+</div>
+</div>
+</div>
