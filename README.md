@@ -59,6 +59,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
+- 2017-04-01 Release 0.9 - weitere Timestamp Werte angepasst - Bugfixing 
 - 2017-03-30 Release 0.8 - time_utc, date_min_temp,    date_max_temp in normalem Timestamp Format dd.mm.YYYY HH:MM:SS Format   
 - 2017-03-25 Release 0.7 - Bug-Fix für dynamische Pfade in Webfrontend CGI und    Umbennenung nach Netatmo-Weather 
 - 2017-03-12 Release 0.6 - dynamische    Pfade im Script und Cron-Job, Config-Datei bleibt beim Update    erhalten, wechsel auf GetStationsData API 

@@ -30,7 +30,6 @@ def main():
     miniservername = pluginconfig.get('NETATMO', 'MINISERVER')
     virtualUDPPort = int(pluginconfig.get('NETATMO', 'UDPPORT'))
 
-
     # ---------------------------------------------
     # Parse Loxberry config file
     # ---------------------------------------------
@@ -38,7 +37,6 @@ def main():
     loxberryconfig.read("REPLACEBYBASEFOLDER/config/system/general.cfg")
 
     miniserverIP = loxberryconfig.get(miniservername, 'IPADDRESS')
-
 
     # ---------------------------------------------
     # exit if PlugIn is not enabled
@@ -130,13 +128,7 @@ def main():
         # Loop for each sensor in station
         for sensor in device["dashboard_data"].keys():
 
-            if sensor.lower() == "time_utc":
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(device["dashboard_data"][sensor])));
-
-			elif sensor.lower() == "date_min_temp":
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(device["dashboard_data"][sensor])));
-
-			elif sensor.lower() == "date_max_temp":
+            if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
                 value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(device["dashboard_data"][sensor])));
 
             else:
@@ -166,15 +158,9 @@ def main():
             # Loop for each sensor in module
             for sensor in module["dashboard_data"]:
 
-                if sensor.lower() == "time_utc":
+                if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,time.strftime("%d.%m.%Y %H:%M:%S",time.localtime(module["dashboard_data"][sensor])));
 
-				elif sensor.lower() == "date_min_temp":
-                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,time.strftime("%d.%m.%Y %H:%M:%S",time.localtime(module["dashboard_data"][sensor])));
-
-				elif sensor.lower() == "date_max_temp":
-                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,time.strftime("%d.%m.%Y %H:%M:%S",time.localtime(module["dashboard_data"][sensor])));
-				
                 else:
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, str(module["dashboard_data"][sensor]));
 
