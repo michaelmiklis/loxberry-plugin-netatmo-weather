@@ -1,6 +1,8 @@
 # Loxberry Plugin: Netatmo Weather
 Dieses Plugin ermöglicht es Daten von einer Netatmo Wetterstation an die Miniserver über UDP zu senden. Der Vorteil ist, dass die normale Netatmo ReST API verwendet wird und lediglich der Benutzername und das Passwort benötigt werden und kein Developer-Account.
 
+<img src="http://www.loxberry.de/wp-content/uploads/thenext-thumb-cache//Netatmo-Weather-b46108565ab2f793df966217aaaecabb-900x0.png" alt="Netatmo Weather Plugin"/>
+
 Das Plugin unterstützt auch mehrere Wetterstationen innerhalb eines Netatmo Accounts. Jeder Messwert (Sensor) wird als einzelnes UDP Paket an den Miniserver gesendet. Das Paket hat immer folgende Aufbau:
 
 [Stationsname].[Modulname].[Sensorname]=[Wert];
