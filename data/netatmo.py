@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # encoding=utf-8
 
-# 2017-03-12 Michael Miklis (michaelmiklis.de)
+# 2017-07-29 Michael Miklis (michaelmiklis.de)
 
 
 import time
@@ -144,7 +144,20 @@ def main():
         for sensor in device["dashboard_data"].keys():
 
             if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(device["dashboard_data"][sensor])));
+					
+                # Calculate offset based on 01.01.2009
+                loxdelta = datetime.timedelta(seconds=1230768000);
+					
+                # Get Time from Sensor
+                currtime = time.localtime(device["dashboard_data"][sensor]);
+				
+                # Convert netatmo date string into datetime
+                dt = datetime.datetime.fromtimestamp(mktime(currtime));
+
+                # Substract time / date offset
+                currLoxtime = dt - loxdelta;
+							
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, currLoxTime);
 
             else:
                 value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,str((device["dashboard_data"][sensor])));
@@ -175,7 +188,20 @@ def main():
             for sensor in module["dashboard_data"]:
 
                 if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
-                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,time.strftime("%d.%m.%Y %H:%M:%S",time.localtime(module["dashboard_data"][sensor])));
+					
+                    # Calculate offset based on 01.01.2009
+                    loxdelta = datetime.timedelta(seconds=1230768000);
+					
+                    # Get Time from Sensor
+                    currtime = time.localtime(device["dashboard_data"][sensor]);
+					
+                    # Convert netatmo date string into datetime
+                    dt = datetime.datetime.fromtimestamp(mktime(currtime));
+
+                    # Substract time / date offset
+                    currLoxtime = dt - loxdelta;
+				
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,currLoxtime);
 
                 else:
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, str(module["dashboard_data"][sensor]));
