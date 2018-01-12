@@ -9,7 +9,7 @@
 
 # Will be executed as user "loxberry".
 
-if [ -e /opt/loxberry/data/plugins/netatmo/netatmo.py ]
+if [ -e REPLACEBYBASEFOLDER/data/plugins/REPLACEBYSUBFOLDER/netatmo.py ]
 then
-  /usr/bin/python3 /opt/loxberry/data/plugins/netatmo/netatmo.py
+  /usr/bin/python3 REPLACEBYBASEFOLDER/data/plugins/REPLACEBYSUBFOLDER/netatmo.py
 fi

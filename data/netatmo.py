@@ -22,7 +22,7 @@ def main():
     # Parse PlugIn config file
     # ---------------------------------------------
     pluginconfig = configparser.ConfigParser()
-    pluginconfig.read("/opt/loxberry/config/plugins/netatmo/netatmo.cfg")
+    pluginconfig.read("REPLACEBYBASEFOLDER/config/plugins/REPLACEBYSUBFOLDER/netatmo.cfg")
 
     username = pluginconfig.get('NETATMO', 'USERNAME')
     password = pluginconfig.get('NETATMO', 'PASSWORD')
@@ -34,7 +34,7 @@ def main():
     # Parse Loxberry config file
     # ---------------------------------------------
     loxberryconfig = configparser.ConfigParser()
-    loxberryconfig.read("/opt/loxberry/config/system/general.cfg")
+    loxberryconfig.read("REPLACEBYBASEFOLDER/config/system/general.cfg")
 
     miniserverIP = loxberryconfig.get(miniservername, 'IPADDRESS')
 

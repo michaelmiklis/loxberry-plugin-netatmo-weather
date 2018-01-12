@@ -24,6 +24,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
+- 2017-03-02 Fix in cron-job if-Abfrage 
 - 2017-03-01 Anpassung UDP - für jeden Sensor wird ein eigenes UDP Paket gesendet 
 - 2017-03-01  Anpassung cron-job und    netatmo.py auf statische Pfade da Variablen nicht korrekt aufgelöst    werden (Workaround) 
 - 2017-02-26  Erstellung PlugIn v 0.1
