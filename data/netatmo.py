@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # encoding=utf-8
 
-# 2017-03-01 Michael Miklis (michaelmiklis.de)
+# 2017-03-12 Michael Miklis (michaelmiklis.de)
 
 
 import time
@@ -101,10 +101,10 @@ def main():
     # ---------------------------------------------
     # query device list to get current measurements
     # ---------------------------------------------
-    req = session.post("https://my.netatmo.com/api/devicelist", data=payload)
+    req = session.post("https://my.netatmo.com/api/getstationsdata", data=payload)
 
     if req.status_code != 200:
-        log("Unable to contact https://my.netatmo.com/api/devicelist", "ERROR")
+        log("Unable to contact https://my.netatmo.com/api/getstationsdata", "ERROR")
         log("Status-Code {0} {1}".format(req.status_code, req.text), "ERROR")
         sys.exit(-1)
 
@@ -112,7 +112,7 @@ def main():
     # check if we got a valid access token
     # ---------------------------------------------
     if req.text.startswith("{\"body\":{\"") == False:
-        log("Response from https://my.netatmo.com/api/devicelist has wrong format", "ERROR")
+        log("Response from https://my.netatmo.com/api/getstationsdata has wrong format", "ERROR")
         log("Error: {0}".format(req.text), "ERROR")
         sys.exit(-1)
 
@@ -120,10 +120,9 @@ def main():
     # convert the response into json
     # ---------------------------------------------
     netatmodata = json.loads(req.text)
-    stationdict = {}
 
     # ---------------------------------------------
-    # Loop for each station
+    # Loop for each station and module
     # ---------------------------------------------
     for device in netatmodata["body"]["devices"]:
 
@@ -134,20 +133,31 @@ def main():
             # send udp datagram
             sendudp(value, miniserverIP, virtualUDPPort);
 
-        # add station to dictionary
-        stationdict.update({device["_id"] :  device["station_name"]})
+        for module in device["modules"]:
 
-    # ---------------------------------------------
-    # Loop for each module
-    # ---------------------------------------------
-    for module in netatmodata["body"]["modules"]:
-
-        # Loop for each sensor in module
-        for sensor in module["dashboard_data"].keys():
-            value = "{0}.{1}.{2}={3}".format(stationdict[module["main_device"]], module["module_name"], sensor, str(module["dashboard_data"][sensor]))
+            # ---------------------------------------------
+            # Get battery level
+            # ---------------------------------------------
+            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "battery_vp", str(module["battery_vp"]))
 
             # send udp datagram
             sendudp(value, miniserverIP, virtualUDPPort);
+
+            # ---------------------------------------------
+            # Get WiFi signal quality
+            # ---------------------------------------------
+            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "rf_status", str(module["rf_status"]))
+
+            # send udp datagram
+            sendudp(value, miniserverIP, virtualUDPPort);
+
+            # Loop for each sensor in module
+            for sensor in module["dashboard_data"]:
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, str(module["dashboard_data"][sensor]))
+
+                # send udp datagram
+                sendudp(value, miniserverIP, virtualUDPPort);
+
 
     # exit with errorlevel 0
     sys.exit(0)
