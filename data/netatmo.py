@@ -30,6 +30,7 @@ def main():
     miniservername = pluginconfig.get('NETATMO', 'MINISERVER')
     virtualUDPPort = int(pluginconfig.get('NETATMO', 'UDPPORT'))
 
+
     # ---------------------------------------------
     # Parse Loxberry config file
     # ---------------------------------------------
@@ -128,7 +129,18 @@ def main():
 
         # Loop for each sensor in station
         for sensor in device["dashboard_data"].keys():
-            value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, str(device["dashboard_data"][sensor]))
+
+            if sensor.lower() == "time_utc":
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(device["dashboard_data"][sensor])));
+
+			elif sensor.lower() == "date_min_temp":
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(device["dashboard_data"][sensor])));
+
+			elif sensor.lower() == "date_max_temp":
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(device["dashboard_data"][sensor])));
+
+            else:
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,str((device["dashboard_data"][sensor])));
 
             # send udp datagram
             sendudp(value, miniserverIP, virtualUDPPort);
@@ -153,7 +165,20 @@ def main():
 
             # Loop for each sensor in module
             for sensor in module["dashboard_data"]:
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, str(module["dashboard_data"][sensor]))
+
+                if sensor.lower() == "time_utc":
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,time.strftime("%d.%m.%Y %H:%M:%S",time.localtime(module["dashboard_data"][sensor])));
+
+				elif sensor.lower() == "date_min_temp":
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,time.strftime("%d.%m.%Y %H:%M:%S",time.localtime(module["dashboard_data"][sensor])));
+
+				elif sensor.lower() == "date_max_temp":
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,time.strftime("%d.%m.%Y %H:%M:%S",time.localtime(module["dashboard_data"][sensor])));
+				
+                else:
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, str(module["dashboard_data"][sensor]));
+
+
 
                 # send udp datagram
                 sendudp(value, miniserverIP, virtualUDPPort);
