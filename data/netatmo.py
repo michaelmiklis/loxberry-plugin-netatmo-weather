@@ -11,6 +11,8 @@ import requests
 import json
 import sys
 import socket
+import datetime
+import time
 
 def main():
     # ---------------------------------------------
@@ -39,6 +41,7 @@ def main():
 
     miniserverIP = loxberryconfig.get(miniservername, 'IPADDRESS')
 
+	
     # ---------------------------------------------
     # exit if PlugIn is not enabled
     # ---------------------------------------------
@@ -152,12 +155,12 @@ def main():
                 currtime = time.localtime(device["dashboard_data"][sensor]);
 				
                 # Convert netatmo date string into datetime
-                dt = datetime.datetime.fromtimestamp(mktime(currtime));
+                dt = datetime.datetime.fromtimestamp(time.mktime(currtime));
 
                 # Substract time / date offset
                 currLoxtime = dt - loxdelta;
 							
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, currLoxTime);
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, currLoxtime);
 
             else:
                 value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,str((device["dashboard_data"][sensor])));
@@ -193,10 +196,10 @@ def main():
                     loxdelta = datetime.timedelta(seconds=1230768000);
 					
                     # Get Time from Sensor
-                    currtime = time.localtime(device["dashboard_data"][sensor]);
+                    currtime = time.localtime(module["dashboard_data"][sensor]);
 					
                     # Convert netatmo date string into datetime
-                    dt = datetime.datetime.fromtimestamp(mktime(currtime));
+                    dt = datetime.datetime.fromtimestamp(time.mktime(currtime));
 
                     # Substract time / date offset
                     currLoxtime = dt - loxdelta;
