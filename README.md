@@ -5,11 +5,11 @@ Dieses Plugin ermöglicht es Daten von einer Netatmo Wetterstation an die Minise
 
 Das Plugin unterstützt auch mehrere Wetterstationen innerhalb eines Netatmo Accounts. Jeder Messwert (Sensor) wird als einzelnes UDP Paket an den Miniserver gesendet. Das Paket hat immer folgende Aufbau:
 
-[Stationsname].[Modulname].[Sensorname]=[Wert];
+[Stationsname].[Modulname].[Sensorname]=[Wert]
 
 zum Beispiel:
-
-Zuhause.Wohnzimmer.Temperature=30;Zuhause.Wohnzimmer.Humidity=56;
+Zuhause.Wohnzimmer.Temperature=30
+Zuhause.Wohnzimmer.Humidity=56
 
 ## Beispiel
 Die UDP Pakete werden wie im Screenshot ersichtlich einzeln an den Miniserver gesendet:
@@ -21,31 +21,7 @@ Hierzu kann ein virtueller UDP Befehl angelegt werden mit folgender Befehlserken
 
 ## Batterie-Level
 
-Der Batterie-Level wird ab Version 0.6. in [Stationsname].[Modulname].battery_vp übermittelt. Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
-
-**Innenmodul:**
-- 6000 = max  
-- 5640 = full  
-- 5280 = high  
-- 4920 = medium  
-- 4560 = low 
-- < 4560  = very low
-
-**Außenmodul und Regenmesser:**
-- 6000 = max
-- 5500 = full
-- 5000 = high
-- 4500 = medium
-- 4000 = low
-- < 4000 = very low
-
-**Windmesser:**
-- 6000 = max
-- 5590 = full
-- 5180 = high
-- 4770 = medium
-- 4360 = low
-- < 4360 = very low
+Der Batterie-Level wird ab Version 0.13 in [Stationsname].[Modulname].battery_percent als Prozentwert übermittelt. 
 
 ## WiFi Signalstärke
 Die WiFi-Signalstärke wird ab Version 0.10. in [Stationsname].[Modulname].wifi_status übermittelt. Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
@@ -68,6 +44,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
+- 2018-02-12 Release 0.13 - Datum- und Zeitwerte werden nun korrekt übertragen, Update auf Loxberry 1.0, Batteriestatus in Prozent
 - 2018-01-28 Release 0.12 - Anpassungen für Loxberry 0.3, neue Verzeichnisstruktur, Datumsformat auf Nullzeit-Delta angepasst
 - 2017-06-14 Release 0.10 - wifi_status hinzugefügt, Umlaute-Problem   behoben, JSON in Webfrontend entfernt, User-Agent eingebaut
 - 2017-04-01 Release 0.9 - weitere Timestamp Werte angepasst - Bugfixing 
@@ -81,3 +58,68 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 
 ## Known-Issues
 - Logging erfolgt nicht in die Log-Datei
+
+## Sensor-Werte
+Base Station:
+{Station Name}.{Base Name}.wifi_status=20
+{Station Name}.{Base Name}.date_min_temp=287640458
+{Station Name}.{Base Name}.Temperature=22.3
+{Station Name}.{Base Name}.time_utc=287699122
+{Station Name}.{Base Name}.Noise=38
+{Station Name}.{Base Name}.AbsolutePressure=995.1
+{Station Name}.{Base Name}.CO2=848
+{Station Name}.{Base Name}.temp_trend=stable
+{Station Name}.{Base Name}.pressure_trend=up
+{Station Name}.{Base Name}.max_temp=22.6
+{Station Name}.{Base Name}.date_max_temp=287694609
+{Station Name}.{Base Name}.min_temp=20.8
+{Station Name}.{Base Name}.Pressure=1018.5
+{Station Name}.{Base Name}.Humidity=55
+
+Outdoor Unit:
+{Station Name}.{Module Name}.battery_percent=27
+{Station Name}.{Module Name}.rf_status=65
+{Station Name}.{Module Name}.Temperature=-1.4
+{Station Name}.{Module Name}.date_min_temp=287354902
+{Station Name}.{Module Name}.time_utc=287354902
+{Station Name}.{Module Name}.max_temp=-1.4
+{Station Name}.{Module Name}.date_max_temp=287354902
+{Station Name}.{Module Name}.min_temp=-1.4
+{Station Name}.{Module Name}.Humidity=85
+
+Indoor Unit:
+{Station Name}.{Module Name}.battery_percent=3
+{Station Name}.{Module Name}.rf_status=64
+{Station Name}.{Module Name}.Temperature=20.6
+{Station Name}.{Module Name}.CO2=1040
+{Station Name}.{Module Name}.date_min_temp=279849458
+{Station Name}.{Module Name}.time_utc=279850739
+{Station Name}.{Module Name}.max_temp=20.8
+{Station Name}.{Module Name}.date_max_temp=279846125
+{Station Name}.{Module Name}.min_temp=20.6
+{Station Name}.{Module Name}.Humidity=57
+
+Rain Gauge:
+{Station Name}.{Module Name}.battery_percent=72
+{Station Name}.{Module Name}.rf_status=57
+{Station Name}.{Module Name}.sum_rain_1=0
+{Station Name}.{Module Name}.sum_rain_24=1.616
+{Station Name}.{Module Name}.Rain=0
+{Station Name}.{Module Name}.time_utc=287699120
+
+Wind Gauge:
+{Station Name}.{Module Name}battery_percent=66
+{Station Name}.{Module Name}rf_status=67
+{Station Name}.{Module Name}WindHistoric=[]
+{Station Name}.{Module Name}GustStrength=6
+{Station Name}.{Module Name}max_wind_angle=185
+{Station Name}.{Module Name}time_utc=287699120
+{Station Name}.{Module Name}max_wind_str=26
+{Station Name}.{Module Name}max_temp=0
+{Station Name}.{Module Name}WindAngle=225
+{Station Name}.{Module Name}WindStrength=3
+{Station Name}.{Module Name}date_max_temp=287622255
+{Station Name}.{Module Name}date_min_temp=287622255
+{Station Name}.{Module Name}date_max_wind_str=287685251
+{Station Name}.{Module Name}GustAngle=190
+{Station Name}.{Module Name}min_temp=0

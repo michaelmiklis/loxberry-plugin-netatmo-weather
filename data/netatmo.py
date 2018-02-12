@@ -142,78 +142,94 @@ def main():
         # send udp datagram
         sendudp(value, miniserverIP, virtualUDPPort);
 
+        # ---------------------------------------------
+        # Loop for each station and module
+        # ---------------------------------------------
+        for device in netatmodata["body"]["devices"]:
 
-        # Loop for each sensor in station
-        for sensor in device["dashboard_data"].keys():
-
-            if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
-					
-                # Calculate offset based on 01.01.2009
-                loxdelta = datetime.timedelta(seconds=1230768000);
-					
-                # Get Time from Sensor
-                currtime = time.localtime(device["dashboard_data"][sensor]);
-				
-                # Convert netatmo date string into datetime
-                dt = datetime.datetime.fromtimestamp(time.mktime(currtime));
-
-                # Substract time / date offset
-                currLoxtime = dt - loxdelta;
-							
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, currLoxtime);
-
-            else:
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,str((device["dashboard_data"][sensor])));
+            # ---------------------------------------------
+            # Get WiFi Signal
+            # ---------------------------------------------
+            value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], "wifi_status",
+                                             str(device["wifi_status"]))
 
             # send udp datagram
             sendudp(value, miniserverIP, virtualUDPPort);
+            log(value, "INFO")
 
+            # Loop for each sensor in station
+            for sensor in device["dashboard_data"].keys():
 
-        for module in device["modules"]:
+                if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (
+                    sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
 
-            # ---------------------------------------------
-            # Get battery level
-            # ---------------------------------------------
-            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "battery_vp", str(module["battery_vp"]))
-
-            # send udp datagram
-            sendudp(value, miniserverIP, virtualUDPPort);
-
-            # ---------------------------------------------
-            # Get RF signal quality
-            # ---------------------------------------------
-            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "rf_status", str(module["rf_status"]))
-
-            # send udp datagram
-            sendudp(value, miniserverIP, virtualUDPPort);
-
-            # Loop for each sensor in module
-            for sensor in module["dashboard_data"]:
-
-                if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
-					
                     # Calculate offset based on 01.01.2009
-                    loxdelta = datetime.timedelta(seconds=1230768000);
-					
+                    loxBaseEpoch = 1230768000;
+
                     # Get Time from Sensor
-                    currtime = time.localtime(module["dashboard_data"][sensor]);
-					
-                    # Convert netatmo date string into datetime
-                    dt = datetime.datetime.fromtimestamp(time.mktime(currtime));
+                    sensorTime = device["dashboard_data"][sensor];
 
                     # Substract time / date offset
-                    currLoxtime = dt - loxdelta;
-				
-                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,currLoxtime);
+                    loxSensorTime = sensorTime - loxBaseEpoch;
+
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
+                                                     loxSensorTime);
 
                 else:
-                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, str(module["dashboard_data"][sensor]));
-
-
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
+                                                     str((device["dashboard_data"][sensor])));
 
                 # send udp datagram
                 sendudp(value, miniserverIP, virtualUDPPort);
+                log(value, "INFO")
 
+            for module in device["modules"]:
+
+                # ---------------------------------------------
+                # Get battery level
+                # ---------------------------------------------
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "battery_percent",
+                                                 str(module["battery_percent"]))
+
+                # send udp datagram
+                sendudp(value, miniserverIP, virtualUDPPort);
+                log(value, "INFO")
+
+                # ---------------------------------------------
+                # Get RF signal quality
+                # ---------------------------------------------
+                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "rf_status",
+                                                 str(module["rf_status"]))
+
+                # send udp datagram
+                sendudp(value, miniserverIP, virtualUDPPort);
+                log(value, "INFO")
+
+                # Loop for each sensor in module
+                for sensor in module["dashboard_data"]:
+
+                    if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (
+                        sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
+
+                        # Calculate offset based on 01.01.2009
+                        loxBaseEpoch = 1230768000;
+
+                        # Get Time from Sensor
+                        sensorTime = module["dashboard_data"][sensor];
+
+                        # Substract time / date offset
+                        loxSensorTime = sensorTime - loxBaseEpoch;
+
+                        value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
+                                                         loxSensorTime);
+
+                    else:
+                        value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
+                                                         str(module["dashboard_data"][sensor]));
+
+                    # send udp datagram
+                    sendudp(value, miniserverIP, virtualUDPPort);
+                    log(value, "INFO")
 
     # exit with errorlevel 0
     sys.exit(0)
