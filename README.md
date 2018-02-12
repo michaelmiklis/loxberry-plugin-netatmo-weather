@@ -60,66 +60,73 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 - Logging erfolgt nicht in die Log-Datei
 
 ## Sensor-Werte
-Base Station:
-{Station Name}.{Base Name}.wifi_status=20
-{Station Name}.{Base Name}.date_min_temp=287640458
-{Station Name}.{Base Name}.Temperature=22.3
-{Station Name}.{Base Name}.time_utc=287699122
-{Station Name}.{Base Name}.Noise=38
-{Station Name}.{Base Name}.AbsolutePressure=995.1
-{Station Name}.{Base Name}.CO2=848
-{Station Name}.{Base Name}.temp_trend=stable
-{Station Name}.{Base Name}.pressure_trend=up
-{Station Name}.{Base Name}.max_temp=22.6
-{Station Name}.{Base Name}.date_max_temp=287694609
-{Station Name}.{Base Name}.min_temp=20.8
-{Station Name}.{Base Name}.Pressure=1018.5
-{Station Name}.{Base Name}.Humidity=55
 
-Outdoor Unit:
-{Station Name}.{Module Name}.battery_percent=27
-{Station Name}.{Module Name}.rf_status=65
-{Station Name}.{Module Name}.Temperature=-1.4
-{Station Name}.{Module Name}.date_min_temp=287354902
-{Station Name}.{Module Name}.time_utc=287354902
-{Station Name}.{Module Name}.max_temp=-1.4
-{Station Name}.{Module Name}.date_max_temp=287354902
-{Station Name}.{Module Name}.min_temp=-1.4
-{Station Name}.{Module Name}.Humidity=85
+| Base Station                                        | 
+| --------------------------------------------------- |
+| {Station Name}.{Base Name}.wifi_status=20           |
+| {Station Name}.{Base Name}.date_min_temp=287640458  | 
+| {Station Name}.{Base Name}.Temperature=22.3         | 
+| {Station Name}.{Base Name}.time_utc=287699122       | 
+| {Station Name}.{Base Name}.Noise=38                 | 
+| {Station Name}.{Base Name}.AbsolutePressure=995.1   | 
+| {Station Name}.{Base Name}.CO2=848                  | 
+| {Station Name}.{Base Name}.temp_trend=stable        | 
+| {Station Name}.{Base Name}.pressure_trend=up        | 
+| {Station Name}.{Base Name}.max_temp=22.6            | 
+| {Station Name}.{Base Name}.date_max_temp=287694609  | 
+| {Station Name}.{Base Name}.min_temp=20.8            | 
+| {Station Name}.{Base Name}.Pressure=1018.5          | 
+| {Station Name}.{Base Name}.Humidity=55              | 
 
-Indoor Unit:
-{Station Name}.{Module Name}.battery_percent=3
-{Station Name}.{Module Name}.rf_status=64
-{Station Name}.{Module Name}.Temperature=20.6
-{Station Name}.{Module Name}.CO2=1040
-{Station Name}.{Module Name}.date_min_temp=279849458
-{Station Name}.{Module Name}.time_utc=279850739
-{Station Name}.{Module Name}.max_temp=20.8
-{Station Name}.{Module Name}.date_max_temp=279846125
-{Station Name}.{Module Name}.min_temp=20.6
-{Station Name}.{Module Name}.Humidity=57
 
-Rain Gauge:
-{Station Name}.{Module Name}.battery_percent=72
-{Station Name}.{Module Name}.rf_status=57
-{Station Name}.{Module Name}.sum_rain_1=0
-{Station Name}.{Module Name}.sum_rain_24=1.616
-{Station Name}.{Module Name}.Rain=0
-{Station Name}.{Module Name}.time_utc=287699120
+| Outdoor Unit                                        | 
+| --------------------------------------------------- |
+| {Station Name}.{Module Name}.battery_percent=27     |
+| {Station Name}.{Module Name}.rf_status=65           |
+| {Station Name}.{Module Name}.Temperature=-1.4       |
+| {Station Name}.{Module Name}.date_min_temp=287354902|
+| {Station Name}.{Module Name}.time_utc=287354902     |
+| {Station Name}.{Module Name}.max_temp=-1.4          |
+| {Station Name}.{Module Name}.date_max_temp=287354902|
+| {Station Name}.{Module Name}.min_temp=-1.4          |
+| {Station Name}.{Module Name}.Humidity=85            |
 
-Wind Gauge:
-{Station Name}.{Module Name}battery_percent=66
-{Station Name}.{Module Name}rf_status=67
-{Station Name}.{Module Name}WindHistoric=[]
-{Station Name}.{Module Name}GustStrength=6
-{Station Name}.{Module Name}max_wind_angle=185
-{Station Name}.{Module Name}time_utc=287699120
-{Station Name}.{Module Name}max_wind_str=26
-{Station Name}.{Module Name}max_temp=0
-{Station Name}.{Module Name}WindAngle=225
-{Station Name}.{Module Name}WindStrength=3
-{Station Name}.{Module Name}date_max_temp=287622255
-{Station Name}.{Module Name}date_min_temp=287622255
-{Station Name}.{Module Name}date_max_wind_str=287685251
-{Station Name}.{Module Name}GustAngle=190
-{Station Name}.{Module Name}min_temp=0
+| Indoor Unit                                         |
+| --------------------------------------------------- |
+| {Station Name}.{Module Name}.battery_percent=3      |
+| {Station Name}.{Module Name}.rf_status=64           |
+| {Station Name}.{Module Name}.Temperature=20.6       |
+| {Station Name}.{Module Name}.CO2=1040               |
+| {Station Name}.{Module Name}.date_min_temp=279849458|
+| {Station Name}.{Module Name}.time_utc=279850739     |
+| {Station Name}.{Module Name}.max_temp=20.8          |
+| {Station Name}.{Module Name}.date_max_temp=279846125|
+| {Station Name}.{Module Name}.min_temp=20.6          |
+| {Station Name}.{Module Name}.Humidity=57            |
+
+| Rain Gauge                                          |
+| --------------------------------------------------- |  
+| {Station Name}.{Module Name}.battery_percent=72     |
+| {Station Name}.{Module Name}.rf_status=57           |
+| {Station Name}.{Module Name}.sum_rain_1=0           |
+| {Station Name}.{Module Name}.sum_rain_24=1.616      |
+| {Station Name}.{Module Name}.Rain=0                 |
+| {Station Name}.{Module Name}.time_utc=287699120     |
+
+| Wind Gauge                                              |
+| ------------------------------------------------------- |
+| {Station Name}.{Module Name}battery_percent=66          |
+| {Station Name}.{Module Name}rf_status=67                |
+| {Station Name}.{Module Name}WindHistoric=[]             |
+| {Station Name}.{Module Name}GustStrength=6              |
+| {Station Name}.{Module Name}max_wind_angle=185          |
+| {Station Name}.{Module Name}time_utc=287699120          |
+| {Station Name}.{Module Name}max_wind_str=26             |
+| {Station Name}.{Module Name}max_temp=0                  |
+| {Station Name}.{Module Name}WindAngle=225               |
+| {Station Name}.{Module Name}WindStrength=3              |
+| {Station Name}.{Module Name}date_max_temp=287622255     |
+| {Station Name}.{Module Name}date_min_temp=287622255     |
+| {Station Name}.{Module Name}date_max_wind_str=287685251 |
+| {Station Name}.{Module Name}GustAngle=190               |
+| {Station Name}.{Module Name}min_temp=0                  |
