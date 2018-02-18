@@ -11,7 +11,6 @@ import requests
 import json
 import sys
 import socket
-import datetime
 import time
 
 def main():
@@ -29,6 +28,7 @@ def main():
     username = pluginconfig.get('NETATMO', 'USERNAME')
     password = pluginconfig.get('NETATMO', 'PASSWORD')
     enabled = pluginconfig.get('NETATMO', 'ENABLED')
+    localtime = pluginconfig.get('NETATMO', 'ENABLED')
     miniservername = pluginconfig.get('NETATMO', 'MINISERVER')
     virtualUDPPort = int(pluginconfig.get('NETATMO', 'UDPPORT'))
 
@@ -140,7 +140,7 @@ def main():
         value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], "wifi_status", str(device["wifi_status"]))
 
         # send udp datagram
-        sendudp(value, miniserverIP, virtualUDPPort);
+        sendudp(value, miniserverIP, virtualUDPPort)
 
         # ---------------------------------------------
         # Loop for each station and module
@@ -154,7 +154,7 @@ def main():
                                              str(device["wifi_status"]))
 
             # send udp datagram
-            sendudp(value, miniserverIP, virtualUDPPort);
+            sendudp(value, miniserverIP, virtualUDPPort)
             log(value, "INFO")
 
             # Loop for each sensor in station
@@ -167,20 +167,26 @@ def main():
                     loxBaseEpoch = 1230768000;
 
                     # Get Time from Sensor
-                    sensorTime = device["dashboard_data"][sensor];
+                    sensorTime = device["dashboard_data"][sensor]
 
-                    # Substract time / date offset
+                    # Convert time to localtime if enabled
+                    if localtime == "1":
+                        sensorLocalTime = time.localtime(sensorTime)
+
+                        sensorTime = sensorTime + sensorLocalTime.tm_gmtoff
+
+                    # Subtract time / date offset
                     loxSensorTime = sensorTime - loxBaseEpoch;
 
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
-                                                     loxSensorTime);
+                                                     loxSensorTime)
 
                 else:
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
-                                                     str((device["dashboard_data"][sensor])));
+                                                     str((device["dashboard_data"][sensor])))
 
                 # send udp datagram
-                sendudp(value, miniserverIP, virtualUDPPort);
+                sendudp(value, miniserverIP, virtualUDPPort)
                 log(value, "INFO")
 
             for module in device["modules"]:
@@ -215,20 +221,26 @@ def main():
                         loxBaseEpoch = 1230768000;
 
                         # Get Time from Sensor
-                        sensorTime = module["dashboard_data"][sensor];
+                        sensorTime = module["dashboard_data"][sensor]
 
-                        # Substract time / date offset
-                        loxSensorTime = sensorTime - loxBaseEpoch;
+                        # Convert time to localtime if enabled
+                        if localtime == "1":
+                            sensorLocalTime = time.localtime(sensorTime)
+
+                            sensorTime = sensorTime + sensorLocalTime.tm_gmtoff
+
+                        # Subtract time / date offset
+                        loxSensorTime = sensorTime - loxBaseEpoch
 
                         value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
-                                                         loxSensorTime);
+                                                         loxSensorTime)
 
                     else:
                         value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
-                                                         str(module["dashboard_data"][sensor]));
+                                                         str(module["dashboard_data"][sensor]))
 
                     # send udp datagram
-                    sendudp(value, miniserverIP, virtualUDPPort);
+                    sendudp(value, miniserverIP, virtualUDPPort)
                     log(value, "INFO")
 
     # exit with errorlevel 0

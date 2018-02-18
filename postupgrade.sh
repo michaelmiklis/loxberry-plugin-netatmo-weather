@@ -10,6 +10,9 @@ ARGV5=$5 # Fifth argument is Base folder of LoxBerry
 echo "<INFO> Copy back existing config files"
 cp -v -r /tmp/uploads/$ARGV1\_upgrade/config/$ARGV3/* $ARGV5/config/plugins/$ARGV3/ 
 
+echo "<INFO> Adding new config parameters"
+grep -q -F "LOCALTIME=" $ARGV5/config/plugins/$ARGV3/netatmo.cfg || echo "LOCALTIME=0" >> $ARGV5/config/plugins/$ARGV3/netatmo.cfg 
+
 echo "<INFO> Copy back existing log files"
 cp -v -r /tmp/uploads/$ARGV1\_upgrade/log/$ARGV3/* $ARGV5/log/plugins/$ARGV3/ 
 

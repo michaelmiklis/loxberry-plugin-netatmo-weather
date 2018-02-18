@@ -40,7 +40,9 @@ our $password;
 our $miniserver;
 our $msudpport;
 our $enabled;
+our $localtime;
 our $Enabledlist;
+our $Localtimelist;
 
 # ---------------------------------------
 # Read Settings
@@ -83,7 +85,8 @@ else { $msudpport = $msudpport;  } } else { $msudpport = quotemeta($query{'msudp
 if ( !$query{'enabled'} )   { if ( param('enabled')  ) { $enabled = quotemeta(param('enabled'));         } 
 else { $enabled = $enabled;  } } else { $enabled = quotemeta($query{'enabled'});   }
 
-
+if ( !$query{'localtime'} )   { if ( param('localtime')  ) { $localtime = quotemeta(param('localtime'));         } 
+else { $localtime = $localtime;  } } else { $localtime = quotemeta($query{'localtime'});   }
 
 
 # ---------------------------------------
@@ -101,6 +104,8 @@ if (param('savedata')) {
 
 	if ($enabled ne 1) { $enabled = 0 }
 
+	if ($localtime ne 1) { $localtime = 0 }
+	
 	$username = encode_entities($username);
 	print STDERR "$username\n";
 
@@ -109,7 +114,8 @@ if (param('savedata')) {
 	$conf->param('NETATMO.MINISERVER', unquotemeta("MINISERVER$miniserver"));
 	$conf->param('NETATMO.UDPPORT', unquotemeta($msudpport));
 	$conf->param('NETATMO.ENABLED', unquotemeta($enabled));
-
+	$conf->param('NETATMO.LOCALTIME', unquotemeta($localtime));
+	
 	$conf->save();
 }
 
@@ -123,6 +129,7 @@ $password = encode_entities($conf->param('NETATMO.PASSWORD'));
 $miniserver = encode_entities($conf->param('NETATMO.MINISERVER'));
 $msudpport = encode_entities($conf->param('NETATMO.UDPPORT'));
 $enabled = encode_entities($conf->param('NETATMO.ENABLED'));
+$localtime = encode_entities($conf->param('NETATMO.LOCALTIME'));
 
 
 # ---------------------------------------
@@ -132,6 +139,15 @@ if ($enabled eq "1") {
 	$Enabledlist = '<option value="0">No</option><option value="1" selected>Yes</option>\n';
 } else {
 	$Enabledlist = '<option value="0" selected>No</option><option value="1">Yes</option>\n';
+}
+
+# ---------------------------------------
+# Set Localtime Enabled / Disabled switch
+# ---------------------------------------
+if ($localtime eq "1") {
+	$Localtimelist = '<option value="0">No</option><option value="1" selected>Yes</option>\n';
+} else {
+	$Localtimelist = '<option value="0" selected>No</option><option value="1">Yes</option>\n';
 }
 
 
