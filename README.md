@@ -1,7 +1,7 @@
 # Loxberry Plugin: Netatmo Weather
 Dieses Plugin ermöglicht es Daten von einer Netatmo Wetterstation an die Miniserver über UDP zu senden. Der Vorteil ist, dass die normale Netatmo ReST API verwendet wird und lediglich der Benutzername und das Passwort benötigt werden und kein Developer-Account.
 
-<img src="http://www.loxberry.de/wp-content/uploads/thenext-thumb-cache//Netatmo-Weather-b46108565ab2f793df966217aaaecabb-900x0.png" alt="Netatmo Weather Plugin"/>
+<img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/Netatmo-Weather-1024x631.png" alt="Netatmo Weather Plugin"/>
 
 Das Plugin unterstützt auch mehrere Wetterstationen innerhalb eines Netatmo Accounts. Jeder Messwert (Sensor) wird als einzelnes UDP Paket an den Miniserver gesendet. Das Paket hat immer folgende Aufbau:
 
@@ -14,10 +14,10 @@ Zuhause.Wohnzimmer.Humidity=56
 ## Beispiel
 Die UDP Pakete werden wie im Screenshot ersichtlich einzeln an den Miniserver gesendet:
 
-<img src="http://www.loxberry.de/wp-content/uploads/UDP-Monitor-1024x308.png" alt="UDP-Monitor" width="960" height="289"/>
+<img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/UDP-Monitor-1024x308.png" alt="UDP-Monitor" width="960" height="289"/>
 
 Hierzu kann ein virtueller UDP Befehl angelegt werden mit folgender Befehlserkennung:
-<img class="alignnone wp-image-303 " src="http://www.loxberry.de/wp-content/uploads/UDP-Befehl-1024x743.png" alt="UDP-Befehl" width="640" height="464" />
+<img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/UDP-Befehl-1024x743.png" alt="UDP-Befehl" width="640" height="464" />
 
 ## Batterie-Level
 
