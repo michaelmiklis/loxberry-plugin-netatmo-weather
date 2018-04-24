@@ -2,3 +2,4 @@
 .idea/
 .DS_Store
 data/netatmo_Debug.py
+config/netatmo_Debug.cfg
