@@ -44,6 +44,8 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
+- 2018-06-20 Release 0.15 - Netatmo API URL angepasst
+- 2018-02-18 Release 0.14 - Datums- und Zeitwerte können nun über einen Parameter in die lokale Zeitzone konvertiert werden.
 - 2018-02-12 Release 0.13 - Datum- und Zeitwerte werden nun korrekt übertragen, Update auf Loxberry 1.0, Batteriestatus in Prozent
 - 2018-01-28 Release 0.12 - Anpassungen für Loxberry 0.3, neue Verzeichnisstruktur, Datumsformat auf Nullzeit-Delta angepasst
 - 2017-06-14 Release 0.10 - wifi_status hinzugefügt, Umlaute-Problem   behoben, JSON in Webfrontend entfernt, User-Agent eingebaut

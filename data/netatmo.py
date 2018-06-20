@@ -109,10 +109,10 @@ def main():
     # ---------------------------------------------
     # query device list to get current measurements
     # ---------------------------------------------
-    req = session.post("https://my.netatmo.com/api/getstationsdata", data=payload)
+    req = session.post("https://api.netatmo.com/api/getstationsdata", data=payload)
 
     if req.status_code != 200:
-        log("Unable to contact https://my.netatmo.com/api/getstationsdata", "ERROR")
+        log("Unable to contact https://api.netatmo.com/api/getstationsdata", "ERROR")
         log("Status-Code {0} {1}".format(req.status_code, req.text), "ERROR")
         sys.exit(-1)
 
@@ -120,7 +120,7 @@ def main():
     # check if we got a valid access token
     # ---------------------------------------------
     if req.text.startswith("{\"body\":{\"") == False:
-        log("Response from https://my.netatmo.com/api/getstationsdata has wrong format", "ERROR")
+        log("Response from https://api.netatmo.com/api/getstationsdata has wrong format", "ERROR")
         log("Error: {0}".format(req.text), "ERROR")
         sys.exit(-1)
 
