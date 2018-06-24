@@ -38,12 +38,22 @@ Die Funk-Signalstärke zwischen der Basisstation und den Modulen wird ab Version
 - 70 = high
 - 60 = full
 
+## Temperatur- und Luftdrucktrend
+Der Temperatur- und Luftdrucktrend wird bis zur Version 0.15 als String mit den Werten "up", "down" und "stable" übermittelt. Um die Auswertung am Loxone Miniserver zu vereinfachen, wird ab der Version 
+0.16 der Trend als Zahlenwert übermittelt ([Stationsname].[Modulname].pressure_trend und [Stationsname].[Modulname].temp_trend). Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
+
+- -1 = down
+-  0 = stable
+- 1 = up
+
+
 ## Feedback und Diskussion
 Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregungen und Feedback. Hierzu habe ich im Loxforum einen Thread eröffnet:
 
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
+- 2018-06-24 Release 0.16 - temp_trend und pressure_trend als Zahlenwert
 - 2018-06-20 Release 0.15 - Netatmo API URL angepasst
 - 2018-02-18 Release 0.14 - Datums- und Zeitwerte können nun über einen Parameter in die lokale Zeitzone konvertiert werden.
 - 2018-02-12 Release 0.13 - Datum- und Zeitwerte werden nun korrekt übertragen, Update auf Loxberry 1.0, Batteriestatus in Prozent
@@ -72,8 +82,8 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 | {Station Name}.{Base Name}.Noise=38                 | 
 | {Station Name}.{Base Name}.AbsolutePressure=995.1   | 
 | {Station Name}.{Base Name}.CO2=848                  | 
-| {Station Name}.{Base Name}.temp_trend=stable        | 
-| {Station Name}.{Base Name}.pressure_trend=up        | 
+| {Station Name}.{Base Name}.temp_trend=-1, 0, 1      | 
+| {Station Name}.{Base Name}.pressure_trend=-1, 0, 1  | 
 | {Station Name}.{Base Name}.max_temp=22.6            | 
 | {Station Name}.{Base Name}.date_max_temp=287694609  | 
 | {Station Name}.{Base Name}.min_temp=20.8            | 

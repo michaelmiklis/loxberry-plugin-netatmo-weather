@@ -181,6 +181,22 @@ def main():
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
                                                      loxSensorTime)
 
+                # convert trend values down,up,stable into -1, 1 and 0
+                elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
+                    
+                    if device["dashboard_data"][sensor] == "up":
+                        value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, "1")
+
+                    elif device["dashboard_data"][sensor] == "down":
+                        value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, "-1")
+
+                    elif device["dashboard_data"][sensor] == "stable":
+                        value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor, "0")
+
+                    else:
+                        value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
+                                                     str((device["dashboard_data"][sensor])))
+
                 else:
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
                                                      str((device["dashboard_data"][sensor])))
@@ -234,6 +250,22 @@ def main():
 
                         value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
                                                          loxSensorTime)
+
+                    # convert trend values down,up,stable into -1, 1 and 0
+                    elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
+                        
+                        if module["dashboard_data"][sensor] == "up":
+                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "1")
+
+                        elif module["dashboard_data"][sensor] == "down":
+                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "-1")
+
+                        elif module["dashboard_data"][sensor] == "stable":
+                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "0")
+
+                        else:
+                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
+                                                        str((module["dashboard_data"][sensor])))
 
                     else:
                         value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
