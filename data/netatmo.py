@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # encoding=utf-8
 
-# 2017-07-29 Michael Miklis (michaelmiklis.de)
+# 2019-03-08 Michael Miklis (michaelmiklis.de)
 
 
 import time
@@ -12,6 +12,7 @@ import json
 import sys
 import socket
 import time
+from lxml import html
 
 def main():
     # ---------------------------------------------
@@ -62,35 +63,37 @@ def main():
     # ---------------------------------------------
     # connect to netatmo website and grab a session cookie
     # ---------------------------------------------
-    req = session.get("https://auth.netatmo.com/de-DE/access/login")
+    req = session.get("https://auth.netatmo.com/en-us/access/login")
 
     if req.status_code != 200:
-        log("Unable to contact https://auth.netatmo.com/de-E/access/login", "ERROR")
+        log("Unable to contact https://auth.netatmo.com/en-us/access/login", "ERROR")
         log("Error: {0}".format(req.status_code), "ERROR")
         sys.exit(-1)
-
+    
     # ---------------------------------------------
     # check if we got a valid session cookie
     # ---------------------------------------------
-    if session.cookies.get("netatmocomci_csrf_cookie_na") is None:
-        log("No netatmocomci_csrf_cookie_na value found in session cookie", "ERROR")
-        sys.exit(-1)
+    loginpage = html.fromstring(req.text)
+    token = loginpage.xpath('//input[@name="_token"]/@value')
 
+    if token is None:
+        log("No _token value found in response from https://auth.netatmo.com/en-us/access/login", "ERROR")
+        sys.exit(-1)
+    
     # ---------------------------------------------
     # build the payload for authentication
     # ---------------------------------------------
-    payload = {'ci_csrf_netatmo': session.cookies.get("netatmocomci_csrf_cookie_na"),
-               'mail': username,
-               'pass': password,
-               'log_submit': "LOGIN"}
+    payload = {'email': username,
+               'password': password,
+               '_token': token } 
 
     # ---------------------------------------------
     # login and grab an access token
     # ---------------------------------------------
-    req = session.post("https://auth.netatmo.com/de-DE/access/login", data=payload)
+    req = session.post("https://auth.netatmo.com/access/postlogin", data=payload)
 
     if req.status_code != 200:
-        log("Unable to contact https://auth.netatmo.com/de-E/access/login", "ERROR")
+        log("Unable to contact https://auth.netatmo.com/access/postlogin", "ERROR")
         log("Error: {0}".format(req.status_code), "ERROR")
         sys.exit(-1)
 
@@ -164,7 +167,7 @@ def main():
                     sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
 
                     # Calculate offset based on 01.01.2009
-                    loxBaseEpoch = 1230768000;
+                    loxBaseEpoch = 1230768000
 
                     # Get Time from Sensor
                     sensorTime = device["dashboard_data"][sensor]
@@ -176,7 +179,7 @@ def main():
                         sensorTime = sensorTime + sensorLocalTime.tm_gmtoff
 
                     # Subtract time / date offset
-                    loxSensorTime = sensorTime - loxBaseEpoch;
+                    loxSensorTime = sensorTime - loxBaseEpoch
 
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
                                                      loxSensorTime)
@@ -205,75 +208,79 @@ def main():
                 sendudp(value, miniserverIP, virtualUDPPort)
                 log(value, "INFO")
 
-            for module in device["modules"]:
+            # handle base station without any modules
+            if 'modules' in device.keys():
 
-                # ---------------------------------------------
-                # Get battery level
-                # ---------------------------------------------
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "battery_percent",
-                                                 str(module["battery_percent"]))
+                # loop for each module
+                for module in device["modules"]:
 
-                # send udp datagram
-                sendudp(value, miniserverIP, virtualUDPPort);
-                log(value, "INFO")
-
-                # ---------------------------------------------
-                # Get RF signal quality
-                # ---------------------------------------------
-                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "rf_status",
-                                                 str(module["rf_status"]))
-
-                # send udp datagram
-                sendudp(value, miniserverIP, virtualUDPPort);
-                log(value, "INFO")
-
-                # Loop for each sensor in module
-                for sensor in module["dashboard_data"]:
-
-                    if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (
-                        sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
-
-                        # Calculate offset based on 01.01.2009
-                        loxBaseEpoch = 1230768000;
-
-                        # Get Time from Sensor
-                        sensorTime = module["dashboard_data"][sensor]
-
-                        # Convert time to localtime if enabled
-                        if localtime == "1":
-                            sensorLocalTime = time.localtime(sensorTime)
-
-                            sensorTime = sensorTime + sensorLocalTime.tm_gmtoff
-
-                        # Subtract time / date offset
-                        loxSensorTime = sensorTime - loxBaseEpoch
-
-                        value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
-                                                         loxSensorTime)
-
-                    # convert trend values down,up,stable into -1, 1 and 0
-                    elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
-                        
-                        if module["dashboard_data"][sensor] == "up":
-                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "1")
-
-                        elif module["dashboard_data"][sensor] == "down":
-                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "-1")
-
-                        elif module["dashboard_data"][sensor] == "stable":
-                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "0")
-
-                        else:
-                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
-                                                        str((module["dashboard_data"][sensor])))
-
-                    else:
-                        value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
-                                                         str(module["dashboard_data"][sensor]))
+                    # ---------------------------------------------
+                    # Get battery level
+                    # ---------------------------------------------
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "battery_percent",
+                                                    str(module["battery_percent"]))
 
                     # send udp datagram
                     sendudp(value, miniserverIP, virtualUDPPort)
                     log(value, "INFO")
+
+                    # ---------------------------------------------
+                    # Get RF signal quality
+                    # ---------------------------------------------
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "rf_status",
+                                                    str(module["rf_status"]))
+
+                    # send udp datagram
+                    sendudp(value, miniserverIP, virtualUDPPort)
+                    log(value, "INFO")
+
+                    # Loop for each sensor in module
+                    for sensor in module["dashboard_data"]:
+
+                        if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (
+                            sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
+
+                            # Calculate offset based on 01.01.2009
+                            loxBaseEpoch = 1230768000
+
+                            # Get Time from Sensor
+                            sensorTime = module["dashboard_data"][sensor]
+
+                            # Convert time to localtime if enabled
+                            if localtime == "1":
+                                sensorLocalTime = time.localtime(sensorTime)
+
+                                sensorTime = sensorTime + sensorLocalTime.tm_gmtoff
+
+                            # Subtract time / date offset
+                            loxSensorTime = sensorTime - loxBaseEpoch
+
+                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
+                                                            loxSensorTime)
+
+                        # convert trend values down,up,stable into -1, 1 and 0
+                        elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
+                            
+                            if module["dashboard_data"][sensor] == "up":
+                                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "1")
+
+                            elif module["dashboard_data"][sensor] == "down":
+                                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "-1")
+
+                            elif module["dashboard_data"][sensor] == "stable":
+                                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "0")
+
+                            else:
+                                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
+                                                            str((module["dashboard_data"][sensor])))
+
+                        else:
+                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
+                                                            str(module["dashboard_data"][sensor]))
+
+                        # send udp datagram
+                        sendudp(value, miniserverIP, virtualUDPPort)
+                        log(value, "INFO")
 
     # exit with errorlevel 0
     sys.exit(0)
