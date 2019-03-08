@@ -53,6 +53,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
+- 2019-03-08 Release 0.17 - Netatmo Login Prozess angepasst
 - 2018-06-24 Release 0.16 - temp_trend und pressure_trend als Zahlenwert
 - 2018-06-20 Release 0.15 - Netatmo API URL angepasst
 - 2018-02-18 Release 0.14 - Datums- und Zeitwerte können nun über einen Parameter in die lokale Zeitzone konvertiert werden.
