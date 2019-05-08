@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # encoding=utf-8
 
-# 2019-03-08 Michael Miklis (michaelmiklis.de)
+# 2019-05-08 Michael Miklis (michaelmiklis.de)
 
 
 import time
@@ -25,7 +25,7 @@ def main():
     # ---------------------------------------------
     pluginconfig = configparser.ConfigParser()
     pluginconfig.read("REPLACEBYBASEFOLDER/config/plugins/REPLACEBYSUBFOLDER/netatmo.cfg")
-
+  
     username = pluginconfig.get('NETATMO', 'USERNAME')
     password = pluginconfig.get('NETATMO', 'PASSWORD')
     enabled = pluginconfig.get('NETATMO', 'ENABLED')
@@ -39,16 +39,13 @@ def main():
     # ---------------------------------------------
     loxberryconfig = configparser.ConfigParser()
     loxberryconfig.read("REPLACEBYBASEFOLDER/config/system/general.cfg")
-
     miniserverIP = loxberryconfig.get(miniservername, 'IPADDRESS')
-
 	
     # ---------------------------------------------
     # exit if PlugIn is not enabled
     # ---------------------------------------------
     if enabled != "1":
         sys.exit(-1)
-
 
     # ---------------------------------------------
     # start new request session
@@ -140,25 +137,24 @@ def main():
         # ---------------------------------------------
         # Get WiFi Signal
         # ---------------------------------------------
-        value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], "wifi_status", str(device["wifi_status"]))
+        value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], "wifi_status",
+                                            str(device["wifi_status"]))
 
         # send udp datagram
         sendudp(value, miniserverIP, virtualUDPPort)
-
+        log(value, "INFO")
+        
         # ---------------------------------------------
-        # Loop for each station and module
+        # Get devicereachable (a.k.a. offline)
         # ---------------------------------------------
-        for device in netatmodata["body"]["devices"]:
+        value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], "reachable", str(int(device["reachable"])))
 
-            # ---------------------------------------------
-            # Get WiFi Signal
-            # ---------------------------------------------
-            value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], "wifi_status",
-                                             str(device["wifi_status"]))
+        # send udp datagram
+        sendudp(value, miniserverIP, virtualUDPPort)
+        log(value, "INFO")
 
-            # send udp datagram
-            sendudp(value, miniserverIP, virtualUDPPort)
-            log(value, "INFO")
+        # only process station with data (a.k.a. ignore offline stations)
+        if 'dashboard_data' in device.keys():
 
             # Loop for each sensor in station
             for sensor in device["dashboard_data"].keys():
@@ -167,7 +163,7 @@ def main():
                     sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
 
                     # Calculate offset based on 01.01.2009
-                    loxBaseEpoch = 1230768000
+                    loxBaseEpoch = 1230768000;
 
                     # Get Time from Sensor
                     sensorTime = device["dashboard_data"][sensor]
@@ -179,10 +175,10 @@ def main():
                         sensorTime = sensorTime + sensorLocalTime.tm_gmtoff
 
                     # Subtract time / date offset
-                    loxSensorTime = sensorTime - loxBaseEpoch
+                    loxSensorTime = sensorTime - loxBaseEpoch;
 
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
-                                                     loxSensorTime)
+                                                    loxSensorTime)
 
                 # convert trend values down,up,stable into -1, 1 and 0
                 elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
@@ -198,11 +194,11 @@ def main():
 
                     else:
                         value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
-                                                     str((device["dashboard_data"][sensor])))
+                                                    str((device["dashboard_data"][sensor])))
 
                 else:
                     value = "{0}.{1}.{2}={3}".format(device["station_name"], device["module_name"], sensor,
-                                                     str((device["dashboard_data"][sensor])))
+                                                    str((device["dashboard_data"][sensor])))
 
                 # send udp datagram
                 sendudp(value, miniserverIP, virtualUDPPort)
@@ -221,7 +217,7 @@ def main():
                                                     str(module["battery_percent"]))
 
                     # send udp datagram
-                    sendudp(value, miniserverIP, virtualUDPPort)
+                    sendudp(value, miniserverIP, virtualUDPPort);
                     log(value, "INFO")
 
                     # ---------------------------------------------
@@ -231,56 +227,69 @@ def main():
                                                     str(module["rf_status"]))
 
                     # send udp datagram
+                    sendudp(value, miniserverIP, virtualUDPPort);
+                    log(value, "INFO")
+
+                    # ---------------------------------------------
+                    # Get devicereachable (a.k.a. offline)
+                    # ---------------------------------------------
+                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], "reachable", str(int(module["reachable"])))
+
+                    # send udp datagram
                     sendudp(value, miniserverIP, virtualUDPPort)
                     log(value, "INFO")
 
-                    # Loop for each sensor in module
-                    for sensor in module["dashboard_data"]:
 
-                        if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (
-                            sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
+                    # only process modules with data (a.k.a. ignore offline modules)
+                    if 'dashboard_data' in module.keys():
 
-                            # Calculate offset based on 01.01.2009
-                            loxBaseEpoch = 1230768000
+                        # Loop for each sensor in module
+                        for sensor in module["dashboard_data"]:
 
-                            # Get Time from Sensor
-                            sensorTime = module["dashboard_data"][sensor]
+                            if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (
+                                sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
 
-                            # Convert time to localtime if enabled
-                            if localtime == "1":
-                                sensorLocalTime = time.localtime(sensorTime)
+                                # Calculate offset based on 01.01.2009
+                                loxBaseEpoch = 1230768000;
 
-                                sensorTime = sensorTime + sensorLocalTime.tm_gmtoff
+                                # Get Time from Sensor
+                                sensorTime = module["dashboard_data"][sensor]
 
-                            # Subtract time / date offset
-                            loxSensorTime = sensorTime - loxBaseEpoch
+                                # Convert time to localtime if enabled
+                                if localtime == "1":
+                                    sensorLocalTime = time.localtime(sensorTime)
 
-                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
-                                                            loxSensorTime)
+                                    sensorTime = sensorTime + sensorLocalTime.tm_gmtoff
 
-                        # convert trend values down,up,stable into -1, 1 and 0
-                        elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
-                            
-                            if module["dashboard_data"][sensor] == "up":
-                                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "1")
+                                # Subtract time / date offset
+                                loxSensorTime = sensorTime - loxBaseEpoch
 
-                            elif module["dashboard_data"][sensor] == "down":
-                                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "-1")
+                                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
+                                                                loxSensorTime)
 
-                            elif module["dashboard_data"][sensor] == "stable":
-                                value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "0")
+                            # convert trend values down,up,stable into -1, 1 and 0
+                            elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
+                                
+                                if module["dashboard_data"][sensor] == "up":
+                                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "1")
+
+                                elif module["dashboard_data"][sensor] == "down":
+                                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "-1")
+
+                                elif module["dashboard_data"][sensor] == "stable":
+                                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor, "0")
+
+                                else:
+                                    value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
+                                                                str((module["dashboard_data"][sensor])))
 
                             else:
                                 value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
-                                                            str((module["dashboard_data"][sensor])))
+                                                                str(module["dashboard_data"][sensor]))
 
-                        else:
-                            value = "{0}.{1}.{2}={3}".format(device["station_name"], module["module_name"], sensor,
-                                                            str(module["dashboard_data"][sensor]))
-
-                        # send udp datagram
-                        sendudp(value, miniserverIP, virtualUDPPort)
-                        log(value, "INFO")
+                            # send udp datagram
+                            sendudp(value, miniserverIP, virtualUDPPort)
+                            log(value, "INFO")
 
     # exit with errorlevel 0
     sys.exit(0)

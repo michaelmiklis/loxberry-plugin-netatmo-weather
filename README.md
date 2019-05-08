@@ -46,6 +46,12 @@ Der Temperatur- und Luftdrucktrend wird bis zur Version 0.15 als String mit den 
 -  0 = stable
 - 1 = up
 
+## Offline Erkennung (reachable)
+Ab der Version 0.18 wird übermittelt ob die Station aus Sicht der Netatmo API erreichbar ist ([Stationsname].[Modulname].reachabl)
+Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
+
+- 0 = nicht erreichbar (offline)
+- 1 = erreichbar (online)
 
 ## Feedback und Diskussion
 Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregungen und Feedback. Hierzu habe ich im Loxforum einen Thread eröffnet:
@@ -53,6 +59,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
+- 2019-05-08 Release 0.18 - Offline Module und Stationen werden ignoriert
 - 2019-03-08 Release 0.17 - Netatmo Login Prozess angepasst
 - 2018-06-24 Release 0.16 - temp_trend und pressure_trend als Zahlenwert
 - 2018-06-20 Release 0.15 - Netatmo API URL angepasst
@@ -77,7 +84,8 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 | Base Station                                        | 
 | --------------------------------------------------- |
 | {Station Name}.{Base Name}.wifi_status=20           |
-| {Station Name}.{Base Name}.date_min_temp=287640458  | 
+| {Station Name}.{Base Name}.reachable=1,  0          |
+| {Station Name}.{Base Name}.date_min_temp=287640458  |
 | {Station Name}.{Base Name}.Temperature=22.3         | 
 | {Station Name}.{Base Name}.time_utc=287699122       | 
 | {Station Name}.{Base Name}.Noise=38                 | 
@@ -96,6 +104,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 | --------------------------------------------------- |
 | {Station Name}.{Module Name}.battery_percent=27     |
 | {Station Name}.{Module Name}.rf_status=65           |
+| {Station Name}.{Module Name}.reachable=1,  0        |
 | {Station Name}.{Module Name}.Temperature=-1.4       |
 | {Station Name}.{Module Name}.date_min_temp=287354902|
 | {Station Name}.{Module Name}.time_utc=287354902     |
@@ -108,6 +117,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 | --------------------------------------------------- |
 | {Station Name}.{Module Name}.battery_percent=3      |
 | {Station Name}.{Module Name}.rf_status=64           |
+| {Station Name}.{Module Name}.reachable=1,  0        |
 | {Station Name}.{Module Name}.Temperature=20.6       |
 | {Station Name}.{Module Name}.CO2=1040               |
 | {Station Name}.{Module Name}.date_min_temp=279849458|
@@ -121,6 +131,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 | --------------------------------------------------- |  
 | {Station Name}.{Module Name}.battery_percent=72     |
 | {Station Name}.{Module Name}.rf_status=57           |
+| {Station Name}.{Module Name}.reachable=1,  0        |
 | {Station Name}.{Module Name}.sum_rain_1=0           |
 | {Station Name}.{Module Name}.sum_rain_24=1.616      |
 | {Station Name}.{Module Name}.Rain=0                 |
@@ -130,6 +141,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 | ------------------------------------------------------- |
 | {Station Name}.{Module Name}battery_percent=66          |
 | {Station Name}.{Module Name}rf_status=67                |
+| {Station Name}.{Module Name}.reachable=1,  0            |
 | {Station Name}.{Module Name}WindHistoric=[]             |
 | {Station Name}.{Module Name}GustStrength=6              |
 | {Station Name}.{Module Name}max_wind_angle=185          |
