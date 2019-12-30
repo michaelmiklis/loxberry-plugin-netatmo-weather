@@ -53,24 +53,41 @@ Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln
 - 0 = nicht erreichbar (offline)
 - 1 = erreichbar (online)
 
+
+## Troubleshooting
+Sollte das Plugin nicht funktionieren oder nicht die gewünschten Daten an den Loxone Miniserver senden, kann für das Troubleshooting eine SSH-Verbindung (<a href="https://www.loxwiki.eu/pages/viewpage.action?pageId=12091660" target="_blank">Eine SSH-Verbindung mit putty aufbauen / Shell-Zugriff</a>) auf den Loxberry aufgebaut werden und folgende Befehle ausgeführt werden um den Fehler einzugrenzen:
+
+`python3 /opt/loxberry/data/plugins/netatmo-weather/netatmo.py`
+
+Steht in der Ausgabe sinngemäß etwas von "HTTPSConnectionPool(host='auth.netatmo.com', p ort=443): Max retries exceeded" ist euer Account wegen zu vielen Fehlversuchen gesperrt. Dann einfach über den Web-Browser bei Netatmo anmelden und den Account entsperren.
+
+Erscheint eine Meldung sinngemäß "KeyError: 'battery_percent'" (kann auch etwas anderes als battery_percent) sein, klappt die Verbindung zur Netatmo API, aber in der Antwort fehlen gewisse Werte. Dann mit folgendem Befehl weitermachen:
+
+`python3 /opt/loxberry/data/plugins/netatmo-weather/netatmo_APIBody.py | jq`
+
+Dieser zeigt 1:1 die Daten, welche Netatmo liefert als JSON Struktur an. Prüft dann hier, ob der Wert der als 'KeyError' gemeldet wurde, hierin enthalten ist (vermutlich nicht). Dann bitte die Ausgabe im Forum posten. Details dazu im Abschnitt "Feedback und Diskussion".
+
+
 ## Feedback und Diskussion
 Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregungen und Feedback. Hierzu habe ich im Loxforum einen Thread eröffnet:
 
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
+
 ## Change-Log
-- 2019-05-08 Release 0.18 - Offline Module und Stationen werden ignoriert
-- 2019-03-08 Release 0.17 - Netatmo Login Prozess angepasst
-- 2018-06-24 Release 0.16 - temp_trend und pressure_trend als Zahlenwert
-- 2018-06-20 Release 0.15 - Netatmo API URL angepasst
-- 2018-02-18 Release 0.14 - Datums- und Zeitwerte können nun über einen Parameter in die lokale Zeitzone konvertiert werden.
-- 2018-02-12 Release 0.13 - Datum- und Zeitwerte werden nun korrekt übertragen, Update auf Loxberry 1.0, Batteriestatus in Prozent
-- 2018-01-28 Release 0.12 - Anpassungen für Loxberry 0.3, neue Verzeichnisstruktur, Datumsformat auf Nullzeit-Delta angepasst
-- 2017-06-14 Release 0.10 - wifi_status hinzugefügt, Umlaute-Problem   behoben, JSON in Webfrontend entfernt, User-Agent eingebaut
-- 2017-04-01 Release 0.9 - weitere Timestamp Werte angepasst - Bugfixing 
-- 2017-03-30 Release 0.8 - time_utc, date_min_temp,    date_max_temp in normalem Timestamp Format dd.mm.YYYY HH:MM:SS Format   
-- 2017-03-25 Release 0.7 - Bug-Fix für dynamische Pfade in Webfrontend CGI und    Umbennenung nach Netatmo-Weather 
-- 2017-03-12 Release 0.6 - dynamische    Pfade im Script und Cron-Job, Config-Datei bleibt beim Update    erhalten, wechsel auf GetStationsData API 
+- 2019-12-30 Release 2.0.1 - Support für Loxberry 2.0 (getestet auf 2.0.0.4)
+- 2019-05-08 Release 0.18  - Offline Module und Stationen werden ignoriert
+- 2019-03-08 Release 0.17  - Netatmo Login Prozess angepasst
+- 2018-06-24 Release 0.16  - temp_trend und pressure_trend als Zahlenwert
+- 2018-06-20 Release 0.15  - Netatmo API URL angepasst
+- 2018-02-18 Release 0.14  - Datums- und Zeitwerte können nun über einen Parameter in die lokale Zeitzone konvertiert werden.
+- 2018-02-12 Release 0.13  - Datum- und Zeitwerte werden nun korrekt übertragen, Update auf Loxberry 1.0, Batteriestatus in Prozent
+- 2018-01-28 Release 0.12  - Anpassungen für Loxberry 0.3, neue Verzeichnisstruktur, Datumsformat auf Nullzeit-Delta angepasst
+- 2017-06-14 Release 0.10  - wifi_status hinzugefügt, Umlaute-Problem   behoben, JSON in Webfrontend entfernt, User-Agent eingebaut
+- 2017-04-01 Release 0.9   - weitere Timestamp Werte angepasst - Bugfixing 
+- 2017-03-30 Release 0.8   - time_utc, date_min_temp,    date_max_temp in normalem Timestamp Format dd.mm.YYYY HH:MM:SS Format   
+- 2017-03-25 Release 0.7   - Bug-Fix für dynamische Pfade in Webfrontend CGI und    Umbennenung nach Netatmo-Weather 
+- 2017-03-12 Release 0.6   - dynamische    Pfade im Script und Cron-Job, Config-Datei bleibt beim Update  erhalten, wechsel auf GetStationsData API 
 - 2017-03-02 Fix in cron-job    if-Abfrage 
 - 2017-03-01 Anpassung UDP - für jeden Sensor wird ein    eigenes UDP Paket gesendet 
 - 2017-03-01  Anpassung cron-job und    netatmo.py auf statische Pfade da Variablen nicht korrekt aufgelöst    werden (Workaround) 
