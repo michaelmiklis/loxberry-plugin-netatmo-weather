@@ -42,16 +42,19 @@ ARGV5=$5 # Fifth argument is Base folder of LoxBerry
 # Replace real subfolder and scriptname in config file and create subfolder.dat in CGI folder
 /bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/system/cron/cron.05min/$ARGV2
 /bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/data/plugins/$ARGV3/netatmo.py
+/bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/data/plugins/$ARGV3/netatmo_APIBody.py
 /bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/config/plugins/$ARGV3/netatmo.cfg
 /bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/webfrontend/htmlauth/plugins/$ARGV3/index.cgi
 
 /bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/system/cron/cron.05min/$ARGV2
 /bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/data/plugins/$ARGV3/netatmo.py
+/bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/data/plugins/$ARGV3/netatmo_APIBody.py
 /bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/config/plugins/$ARGV3/netatmo.cfg
 /bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/webfrontend/htmlauth/plugins/$ARGV3/index.cgi
 
 /bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/system/cron/cron.05min/$ARGV2
 /bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/data/plugins/$ARGV3/netatmo.py
+/bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/data/plugins/$ARGV3/netatmo_APIBody.py
 /bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/config/plugins/$ARGV3/netatmo.cfg
 /bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/webfrontend/htmlauth/plugins/$ARGV3/index.cgi
 
