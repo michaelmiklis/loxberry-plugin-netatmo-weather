@@ -51,7 +51,18 @@ Ab der Version 0.18 wird übermittelt ob die Station aus Sicht der Netatmo API e
 Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
 
 - 0 = nicht erreichbar (offline)
-- 1 = erreichbar (online)
+- 1 = erreichbar (online) 
+
+
+## Local Time / Lokale Zeitzone
+Durch diese Option kann gesteuert werden, ob alle Datums- und Zeitangaben in UTC (Option aus) oder in der jeweiligen lokalen Zeitzone an den Miniserver übertragen werden.
+
+
+## E-Mail Benachrichtigung durch Netatmo deaktivieren
+Da das Plugin jedesmal eine neue / frische Anmeldung bei Netatmo durchführt, führ dies jedes mal zu einer E-Mail benachrichtigung. Diese kann im Netatmo Konto in den Einstellungen deaktiviert werden:
+
+<img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/MyAccount.png">
+<img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/NewConnection.png">
 
 
 ## Troubleshooting
