@@ -86,6 +86,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 
 
 ## Change-Log
+- 2019-12-30 Release 2.0.2 - Changed from station_name to home_name because of API change by Netatmo
 - 2019-12-30 Release 2.0.1 - Support für Loxberry 2.0 (getestet auf 2.0.0.4)
 - 2019-05-08 Release 0.18  - Offline Module und Stationen werden ignoriert
 - 2019-03-08 Release 0.17  - Netatmo Login Prozess angepasst
