@@ -1,4 +1,5 @@
 # Loxberry Plugin: Netatmo Weather
+
 Dieses Plugin ermöglicht es Daten von einer Netatmo Wetterstation an die Miniserver über UDP zu senden. Der Vorteil ist, dass die normale Netatmo ReST API verwendet wird und lediglich der Benutzername und das Passwort benötigt werden und kein Developer-Account.
 
 <img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/Netatmo-Weather-1024x631.png" alt="Netatmo Weather Plugin"/>
@@ -12,6 +13,7 @@ Zuhause.Wohnzimmer.Temperature=30
 Zuhause.Wohnzimmer.Humidity=56
 
 ## Beispiel
+
 Die UDP Pakete werden wie im Screenshot ersichtlich einzeln an den Miniserver gesendet:
 
 <img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/UDP-Monitor-1024x308.png" alt="UDP-Monitor" width="960" height="289"/>
@@ -24,6 +26,7 @@ Hierzu kann ein virtueller UDP Befehl angelegt werden mit folgender Befehlserken
 Der Batterie-Level wird ab Version 0.13 in [Stationsname].[Modulname].battery_percent als Prozentwert übermittelt. 
 
 ## WiFi Signalstärke
+
 Die WiFi-Signalstärke wird ab Version 0.10. in [Stationsname].[Modulname].wifi_status übermittelt. Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
 
 - 86 = bad
@@ -31,6 +34,7 @@ Die WiFi-Signalstärke wird ab Version 0.10. in [Stationsname].[Modulname].wifi_
 - 56 = good
 
 ## Funk Signalstärke
+
 Die Funk-Signalstärke zwischen der Basisstation und den Modulen wird ab Version 0.6. in [Stationsname].[Modulname].rf_status übermittelt. Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
 
 - 90 = low
@@ -39,33 +43,35 @@ Die Funk-Signalstärke zwischen der Basisstation und den Modulen wird ab Version
 - 60 = full
 
 ## Temperatur- und Luftdrucktrend
+
 Der Temperatur- und Luftdrucktrend wird bis zur Version 0.15 als String mit den Werten "up", "down" und "stable" übermittelt. Um die Auswertung am Loxone Miniserver zu vereinfachen, wird ab der Version 
 0.16 der Trend als Zahlenwert übermittelt ([Stationsname].[Modulname].pressure_trend und [Stationsname].[Modulname].temp_trend). Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
 
 - -1 = down
--  0 = stable
+- 0 = stable
 - 1 = up
 
 ## Offline Erkennung (reachable)
+
 Ab der Version 0.18 wird übermittelt ob die Station aus Sicht der Netatmo API erreichbar ist ([Stationsname].[Modulname].reachabl)
 Es handelt sich um einen Zahlenwert, welchen ihr mit folgender Tabelle umwandeln könnt:
 
 - 0 = nicht erreichbar (offline)
-- 1 = erreichbar (online) 
-
+- 1 = erreichbar (online)
 
 ## Local Time / Lokale Zeitzone
+
 Durch diese Option kann gesteuert werden, ob alle Datums- und Zeitangaben in UTC (Option aus) oder in der jeweiligen lokalen Zeitzone an den Miniserver übertragen werden.
 
-
 ## E-Mail Benachrichtigung durch Netatmo deaktivieren
+
 Da das Plugin jedesmal eine neue / frische Anmeldung bei Netatmo durchführt, führ dies jedes mal zu einer E-Mail benachrichtigung. Diese kann im Netatmo Konto in den Einstellungen deaktiviert werden:
 
 <img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/MyAccount.png">
 <img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/NewConnection.png">
 
-
 ## Troubleshooting
+
 Sollte das Plugin nicht funktionieren oder nicht die gewünschten Daten an den Loxone Miniserver senden, kann für das Troubleshooting eine SSH-Verbindung (<a href="https://www.loxwiki.eu/pages/viewpage.action?pageId=12091660" target="_blank">Eine SSH-Verbindung mit putty aufbauen / Shell-Zugriff</a>) auf den Loxberry aufgebaut werden und folgende Befehle ausgeführt werden um den Fehler einzugrenzen:
 
 `python3 /opt/loxberry/data/plugins/netatmo-weather/netatmo.py`
@@ -78,14 +84,15 @@ Erscheint eine Meldung sinngemäß "KeyError: 'battery_percent'" (kann auch etwa
 
 Dieser zeigt 1:1 die Daten, welche Netatmo liefert als JSON Struktur an. Prüft dann hier, ob der Wert der als 'KeyError' gemeldet wurde, hierin enthalten ist (vermutlich nicht). Dann bitte die Ausgabe im Forum posten. Details dazu im Abschnitt "Feedback und Diskussion".
 
-
 ## Feedback und Diskussion
+
 Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregungen und Feedback. Hierzu habe ich im Loxforum einen Thread eröffnet:
 
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
-
 ## Change-Log
+
+- 2019-12-30 Release 2.0.3 - Fixed bug causing configuration-loss during upgrade, implemented auto-update
 - 2019-12-30 Release 2.0.2 - Changed from station_name to home_name because of API change by Netatmo
 - 2019-12-30 Release 2.0.1 - Support für Loxberry 2.0 (getestet auf 2.0.0.4)
 - 2019-05-08 Release 0.18  - Offline Module und Stationen werden ignoriert
@@ -97,39 +104,39 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 - 2018-01-28 Release 0.12  - Anpassungen für Loxberry 0.3, neue Verzeichnisstruktur, Datumsformat auf Nullzeit-Delta angepasst
 - 2017-06-14 Release 0.10  - wifi_status hinzugefügt, Umlaute-Problem   behoben, JSON in Webfrontend entfernt, User-Agent eingebaut
 - 2017-04-01 Release 0.9   - weitere Timestamp Werte angepasst - Bugfixing 
-- 2017-03-30 Release 0.8   - time_utc, date_min_temp,    date_max_temp in normalem Timestamp Format dd.mm.YYYY HH:MM:SS Format   
+- 2017-03-30 Release 0.8   - time_utc, date_min_temp,    date_max_temp in normalem Timestamp Format dd.mm.YYYY HH:MM:SS Format
 - 2017-03-25 Release 0.7   - Bug-Fix für dynamische Pfade in Webfrontend CGI und    Umbennenung nach Netatmo-Weather 
-- 2017-03-12 Release 0.6   - dynamische    Pfade im Script und Cron-Job, Config-Datei bleibt beim Update  erhalten, wechsel auf GetStationsData API 
-- 2017-03-02 Fix in cron-job    if-Abfrage 
+- 2017-03-12 Release 0.6   - dynamische    Pfade im Script und Cron-Job, Config-Datei bleibt beim Update  erhalten, wechsel auf GetStationsData API
+- 2017-03-02 Fix in cron-job    if-Abfrage
 - 2017-03-01 Anpassung UDP - für jeden Sensor wird ein    eigenes UDP Paket gesendet 
-- 2017-03-01  Anpassung cron-job und    netatmo.py auf statische Pfade da Variablen nicht korrekt aufgelöst    werden (Workaround) 
+- 2017-03-01  Anpassung cron-job und    netatmo.py auf statische Pfade da Variablen nicht korrekt aufgelöst    werden (Workaround)
 - 2017-02-26  Erstellung PlugIn v 0.1
 
 ## Known-Issues
+
 - Logging erfolgt nicht in die Log-Datei
 
 ## Sensor-Werte
 
-| Base Station                                        | 
+| Base Station                                        |
 | --------------------------------------------------- |
 | {Station Name}.{Base Name}.wifi_status=20           |
 | {Station Name}.{Base Name}.reachable=1,  0          |
 | {Station Name}.{Base Name}.date_min_temp=287640458  |
-| {Station Name}.{Base Name}.Temperature=22.3         | 
-| {Station Name}.{Base Name}.time_utc=287699122       | 
-| {Station Name}.{Base Name}.Noise=38                 | 
-| {Station Name}.{Base Name}.AbsolutePressure=995.1   | 
-| {Station Name}.{Base Name}.CO2=848                  | 
-| {Station Name}.{Base Name}.temp_trend=-1, 0, 1      | 
-| {Station Name}.{Base Name}.pressure_trend=-1, 0, 1  | 
-| {Station Name}.{Base Name}.max_temp=22.6            | 
-| {Station Name}.{Base Name}.date_max_temp=287694609  | 
-| {Station Name}.{Base Name}.min_temp=20.8            | 
-| {Station Name}.{Base Name}.Pressure=1018.5          | 
-| {Station Name}.{Base Name}.Humidity=55              | 
+| {Station Name}.{Base Name}.Temperature=22.3         |
+| {Station Name}.{Base Name}.time_utc=287699122       |
+| {Station Name}.{Base Name}.Noise=38                 |
+| {Station Name}.{Base Name}.AbsolutePressure=995.1   |
+| {Station Name}.{Base Name}.CO2=848                  |
+| {Station Name}.{Base Name}.temp_trend=-1, 0, 1      |
+| {Station Name}.{Base Name}.pressure_trend=-1, 0, 1  |
+| {Station Name}.{Base Name}.max_temp=22.6            |
+| {Station Name}.{Base Name}.date_max_temp=287694609  |
+| {Station Name}.{Base Name}.min_temp=20.8            |
+| {Station Name}.{Base Name}.Pressure=1018.5          |
+| {Station Name}.{Base Name}.Humidity=55              |
 
-
-| Outdoor Unit                                        | 
+| Outdoor Unit                                        |
 | --------------------------------------------------- |
 | {Station Name}.{Module Name}.battery_percent=27     |
 | {Station Name}.{Module Name}.rf_status=65           |

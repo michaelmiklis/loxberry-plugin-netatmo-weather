@@ -8,16 +8,16 @@ ARGV4=$4 # Forth argument is Plugin version
 ARGV5=$5 # Fifth argument is Base folder of LoxBerry
 
 echo "<INFO> Copy back existing config files"
-cp -v -r /tmp/uploads/$ARGV1\_upgrade/config/$ARGV3/* $ARGV5/config/plugins/$ARGV3/ 
+cp -v -r /tmp/$ARGV1/_upgrade/config/$ARGV3/* $ARGV5/config/plugins/$ARGV3/ 
 
 echo "<INFO> Adding new config parameters"
 grep -q -F "LOCALTIME=" $ARGV5/config/plugins/$ARGV3/netatmo.cfg || echo "LOCALTIME=0" >> $ARGV5/config/plugins/$ARGV3/netatmo.cfg 
 
 echo "<INFO> Copy back existing log files"
-cp -v -r /tmp/uploads/$ARGV1\_upgrade/log/$ARGV3/* $ARGV5/log/plugins/$ARGV3/ 
+cp -v -r /tmp/$ARGV1/_upgrade/log/$ARGV3/* $ARGV5/log/plugins/$ARGV3/ 
 
 echo "<INFO> Remove temporary folders"
-rm -r /tmp/uploads/$ARGV1\_upgrade
+rm -rf /tmp/$ARGV1/_upgrade
 
 /bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/system/cron/cron.05min/$ARGV2
 /bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/data/plugins/$ARGV3/netatmo.py
