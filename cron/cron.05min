@@ -9,7 +9,7 @@
 
 # Will be executed as user "loxberry".
 
-if [ -e REPLACEBYBASEFOLDER/data/plugins/REPLACEBYSUBFOLDER/netatmo.py ]
+if [ -e $LBPDATA/REPLACEBYSUBFOLDER/netatmo.py ]
 then
-  /usr/bin/python3 REPLACEBYBASEFOLDER/data/plugins/REPLACEBYSUBFOLDER/netatmo.py
+  /usr/bin/python3 $LBPDATA/REPLACEBYSUBFOLDER/netatmo.py --logfile=$LBPLOG/REPLACEBYSUBFOLDER/netatmo-weather.log --configfile=$LBPCONFIG/REPLACEBYSUBFOLDER/netatmo.cfg
 fi

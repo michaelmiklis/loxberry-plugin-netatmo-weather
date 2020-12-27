@@ -19,24 +19,5 @@ cp -v -r /tmp/$ARGV1/_upgrade/log/$ARGV3/* $ARGV5/log/plugins/$ARGV3/
 echo "<INFO> Remove temporary folders"
 rm -rf /tmp/$ARGV1/_upgrade
 
-/bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/system/cron/cron.05min/$ARGV2
-/bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/data/plugins/$ARGV3/netatmo.py
-/bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/data/plugins/$ARGV3/netatmo_APIBody.py
-/bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/config/plugins/$ARGV3/netatmo.cfg
-/bin/sed -i "s#REPLACEBYBASEFOLDER#$ARGV5#" $ARGV5/webfrontend/cgi/plugins/$ARGV3/index.cgi
-
-/bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/system/cron/cron.05min/$ARGV2
-/bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/data/plugins/$ARGV3/netatmo.py
-/bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/data/plugins/$ARGV3/netatmo_APIBody.py
-/bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/config/plugins/$ARGV3/netatmo.cfg
-/bin/sed -i "s#REPLACEBYSUBFOLDER#$ARGV3#" $ARGV5/webfrontend/cgi/plugins/$ARGV3/index.cgi
-
-/bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/system/cron/cron.05min/$ARGV2
-/bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/data/plugins/$ARGV3/netatmo.py
-/bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/data/plugins/$ARGV3/netatmo_APIBody.py
-/bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/config/plugins/$ARGV3/netatmo.cfg
-/bin/sed -i "s#REPLACEBYPLUGINNAME#$ARGV2#" $ARGV5/webfrontend/cgi/plugins/$ARGV3/index.cgi
-
-
 # Exit with Status 0
 exit 0

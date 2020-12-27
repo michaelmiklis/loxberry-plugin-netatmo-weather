@@ -74,7 +74,7 @@ Da das Plugin jedesmal eine neue / frische Anmeldung bei Netatmo durchführt, f�
 
 Sollte das Plugin nicht funktionieren oder nicht die gewünschten Daten an den Loxone Miniserver senden, kann für das Troubleshooting eine SSH-Verbindung (<a href="https://www.loxwiki.eu/pages/viewpage.action?pageId=12091660" target="_blank">Eine SSH-Verbindung mit putty aufbauen / Shell-Zugriff</a>) auf den Loxberry aufgebaut werden und folgende Befehle ausgeführt werden um den Fehler einzugrenzen:
 
-`python3 /opt/loxberry/data/plugins/netatmo-weather/netatmo.py`
+`python3 /opt/loxberry/data/plugins/netatmo-weather/netatmo.py --logfile=$LBPLOG/netatmo-weather/netatmo-weather.log --configfile=$LBPCONFIG/netatmo-weather/netatmo.cfg`
 
 Steht in der Ausgabe sinngemäß etwas von "HTTPSConnectionPool(host='auth.netatmo.com', p ort=443): Max retries exceeded" ist euer Account wegen zu vielen Fehlversuchen gesperrt. Dann einfach über den Web-Browser bei Netatmo anmelden und den Account entsperren.
 
@@ -92,8 +92,9 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 
 ## Change-Log
 
-- 2019-12-30 Release 2.0.3 - Fixed bug causing configuration-loss during upgrade, implemented auto-update
-- 2019-12-30 Release 2.0.2 - Changed from station_name to home_name because of API change by Netatmo
+- 2020-12-27 Release 2.0.4 - Various bug fixings, beginning of general.json, implemented logging to log file
+- 2020-12-24 Release 2.0.3 - Fixed bug causing configuration-loss during upgrade, implemented auto-update
+- 2020-12-23 Release 2.0.2 - Changed from station_name to home_name because of API change by Netatmo
 - 2019-12-30 Release 2.0.1 - Support für Loxberry 2.0 (getestet auf 2.0.0.4)
 - 2019-05-08 Release 0.18  - Offline Module und Stationen werden ignoriert
 - 2019-03-08 Release 0.17  - Netatmo Login Prozess angepasst
@@ -114,7 +115,7 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 
 ## Known-Issues
 
-- Logging erfolgt nicht in die Log-Datei
+- none
 
 ## Sensor-Werte
 
