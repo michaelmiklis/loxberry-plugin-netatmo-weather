@@ -91,8 +91,8 @@ Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregunge
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
-
-- 2020-12-27 Release 2.0.4 - Various bug fixings, beginning of general.json, implemented logging to log file
+- 2021-12-29 Release 2.0.5 - PRE-RELEASE: added next-hop URL after authentication for stability issues, if account has also Netatmo Welcome Cameras enabled
+- 2020-12-27 Release 2.0.4 - RELEASE: Various bug fixings, beginning of general.json, implemented logging to log file
 - 2020-12-24 Release 2.0.3 - Fixed bug causing configuration-loss during upgrade, implemented auto-update
 - 2020-12-23 Release 2.0.2 - Changed from station_name to home_name because of API change by Netatmo
 - 2019-12-30 Release 2.0.1 - Support für Loxberry 2.0 (getestet auf 2.0.0.4)

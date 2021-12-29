@@ -131,10 +131,12 @@ def main(args):
                'password': password,
                '_token': token } 
 
+    param = { 'next_url' : 'https://my.netatmo.com/app/station/' }
+
     """
     login and grab an access token
     """
-    req = session.post("https://auth.netatmo.com/access/postlogin", data=payload)
+    req = session.post("https://auth.netatmo.com/access/postlogin", params=param, data=payload)
 
     if req.status_code != 200:
         logging.error("Unable to contact https://auth.netatmo.com/access/postlogin")
