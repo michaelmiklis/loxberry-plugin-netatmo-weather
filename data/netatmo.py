@@ -10,8 +10,8 @@ from lxml import html
 import urllib.parse
 import logging
 
-def main(args):
 
+def main(args):
     """
     Check if running in debug mode
     """
@@ -42,7 +42,7 @@ def main(args):
     """
     if miniservername.startswith("MINISERVER"):
         miniserverID = miniservername.replace("MINISERVER", "")
-    
+
     else:
         miniserverID = miniservername
         miniservername = "MINISERVER{0}".format(miniserverID)
@@ -68,7 +68,7 @@ def main(args):
         loxberryconfig = configparser.ConfigParser()
         loxberryconfig.read("{0}/general.cfg".format(Config.Loxberry("LBSCONFIG")))
         miniserverIP = loxberryconfig.get(miniservername, 'IPADDRESS')
-    
+
     else:
         with open(lbsConfigGeneralJSON, "r") as lbsConfigGeneralJSONHandle:
             logging.info("using system configuration file {0}/general.json".format(Config.Loxberry("LBSCONFIG")))
@@ -81,7 +81,6 @@ def main(args):
 
         miniserverIP = data["Miniserver"][miniserverID]["Ipaddress"]
         logging.info("Miniserver ip address: {0}".format(miniserverIP))
-
 
     """
     exit if PlugIn is not enabled
@@ -111,27 +110,28 @@ def main(args):
         sys.exit(-1)
     else:
         logging.info("Successfully got session cookie from https://auth.netatmo.com/en-us/access/login")
-    
+
     """
     check if we got a valid session cookie
     """
-    loginpage = html.fromstring(req.text)
-    token = loginpage.xpath('//input[@name="_token"]/@value')
+    req = session.get("https://auth.netatmo.com/access/csrf")
 
-    if token is None:
-        logging.critical("No _token value found in response from https://auth.netatmo.com/en-us/access/login")
+    if req.text.startswith("{\"token\":\"") == False:
+        logging.critical("No _token value found in response from https://auth.netatmo.com/access/csrf")
         sys.exit(-1)
     else:
-        logging.info("Found _token value {0} in response from https://auth.netatmo.com/en-us/access/login".format(token))
-    
+        csrf = json.loads(req.text)
+        token = csrf["token"]
+        logging.info("Found _token value {0} in response from https://auth.netatmo.com/access/csrf".format(token))
+
     """
     build the payload for authentication
     """
     payload = {'email': username,
                'password': password,
-               '_token': token } 
+               '_token': token}
 
-    param = { 'next_url' : 'https://my.netatmo.com/app/station/' }
+    param = {'next_url': 'https://my.netatmo.com/app/station/'}
 
     """
     login and grab an access token
@@ -171,7 +171,6 @@ def main(args):
     else:
         logging.info("Querying queried API  https://api.netatmo.com/api/getstationsdata")
 
-
     """
     check API response has correct format
     """
@@ -196,12 +195,12 @@ def main(args):
         Get WiFi Signal
         """
         value = "{0}.{1}.{2}={3}".format(device["home_name"], device["module_name"], "wifi_status",
-                                            str(device["wifi_status"]))
+                                         str(device["wifi_status"]))
 
         # send udp datagram
         sendudp(value, miniserverIP, virtualUDPPort)
         logging.info(value)
-        
+
         """
         Get devicereachable (a.k.a. offline)
         """
@@ -218,7 +217,7 @@ def main(args):
             for sensor in device["dashboard_data"].keys():
 
                 if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (
-                    sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
+                        sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
 
                     # Calculate offset based on 01.01.2009
                     loxBaseEpoch = 1230768000
@@ -236,11 +235,11 @@ def main(args):
                     loxSensorTime = sensorTime - loxBaseEpoch
 
                     value = "{0}.{1}.{2}={3}".format(device["home_name"], device["module_name"], sensor,
-                                                    loxSensorTime)
+                                                     loxSensorTime)
 
                 # convert trend values down,up,stable into -1, 1 and 0
                 elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
-                    
+
                     if device["dashboard_data"][sensor] == "up":
                         value = "{0}.{1}.{2}={3}".format(device["home_name"], device["module_name"], sensor, "1")
 
@@ -252,11 +251,11 @@ def main(args):
 
                     else:
                         value = "{0}.{1}.{2}={3}".format(device["home_name"], device["module_name"], sensor,
-                                                    str((device["dashboard_data"][sensor])))
+                                                         str((device["dashboard_data"][sensor])))
 
                 else:
                     value = "{0}.{1}.{2}={3}".format(device["home_name"], device["module_name"], sensor,
-                                                    str((device["dashboard_data"][sensor])))
+                                                     str((device["dashboard_data"][sensor])))
 
                 # send udp datagram
                 sendudp(value, miniserverIP, virtualUDPPort)
@@ -272,7 +271,7 @@ def main(args):
                     Get battery level
                     """
                     value = "{0}.{1}.{2}={3}".format(device["home_name"], module["module_name"], "battery_percent",
-                                                    str(module["battery_percent"]))
+                                                     str(module["battery_percent"]))
 
                     # send udp datagram
                     sendudp(value, miniserverIP, virtualUDPPort)
@@ -282,7 +281,7 @@ def main(args):
                     Get RF signal quality
                     """
                     value = "{0}.{1}.{2}={3}".format(device["home_name"], module["module_name"], "rf_status",
-                                                    str(module["rf_status"]))
+                                                     str(module["rf_status"]))
 
                     # send udp datagram
                     sendudp(value, miniserverIP, virtualUDPPort)
@@ -297,7 +296,6 @@ def main(args):
                     sendudp(value, miniserverIP, virtualUDPPort)
                     logging.info(value)
 
-
                     # only process modules with data (a.k.a. ignore offline modules)
                     if 'dashboard_data' in module.keys():
 
@@ -305,7 +303,7 @@ def main(args):
                         for sensor in module["dashboard_data"]:
 
                             if (sensor.lower() == "time_utc") or (sensor.lower() == "date_min_temp") or (
-                                sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
+                                    sensor.lower() == "date_max_temp") or (sensor.lower() == "date_max_wind_str"):
 
                                 # Calculate offset based on 01.01.2009
                                 loxBaseEpoch = 1230768000
@@ -323,11 +321,11 @@ def main(args):
                                 loxSensorTime = sensorTime - loxBaseEpoch
 
                                 value = "{0}.{1}.{2}={3}".format(device["home_name"], module["module_name"], sensor,
-                                                                loxSensorTime)
+                                                                 loxSensorTime)
 
                             # convert trend values down,up,stable into -1, 1 and 0
                             elif (sensor.lower() == "pressure_trend") or (sensor.lower() == "temp_trend"):
-                                
+
                                 if module["dashboard_data"][sensor] == "up":
                                     value = "{0}.{1}.{2}={3}".format(device["home_name"], module["module_name"], sensor, "1")
 
@@ -339,11 +337,11 @@ def main(args):
 
                                 else:
                                     value = "{0}.{1}.{2}={3}".format(device["home_name"], module["module_name"], sensor,
-                                                                str((module["dashboard_data"][sensor])))
+                                                                     str((module["dashboard_data"][sensor])))
 
                             else:
                                 value = "{0}.{1}.{2}={3}".format(device["home_name"], module["module_name"], sensor,
-                                                                str(module["dashboard_data"][sensor]))
+                                                                 str(module["dashboard_data"][sensor]))
 
                             # send udp datagram
                             sendudp(value, miniserverIP, virtualUDPPort)
@@ -353,6 +351,7 @@ def main(args):
     sys.exit(0)
 
 # _______________________________________________________________________________________
+
 
 def sendudp(data, destip, destport):
     # start a new connection udp connection
@@ -373,16 +372,18 @@ def sendudp(data, destip, destport):
 
 # _______________________________________________________________________________________
 
-class Config:
-  __loxberry = {
-    "LBSCONFIG": os.getenv("LBSCONFIG", os.getcwd()),
-  }
 
-  @staticmethod
-  def Loxberry(name):
-    return Config.__loxberry[name]
+class Config:
+    __loxberry = {
+        "LBSCONFIG": os.getenv("LBSCONFIG", os.getcwd()),
+    }
+
+    @staticmethod
+    def Loxberry(name):
+        return Config.__loxberry[name]
 
 # _______________________________________________________________________________________
+
 
 # parse args and call main function
 print('Number of arguments:', len(sys.argv), 'arguments.')
@@ -393,45 +394,44 @@ if __name__ == "__main__":
     Parse commandline arguments
     """
     parser = argparse.ArgumentParser(description="Loxberry Netatmo-Weather Plugin. More information can be found on Github site https://github.com/michaelmiklis/loxberry-plugin-netatmo-weather")
-    
+
     debugroup = parser.add_argument_group("debug")
 
-    debugroup.add_argument("--debug", 
-                        dest="debug",
-                        default=False,
-                        action="store_true",
-                        help="enable debug mode")
+    debugroup.add_argument("--debug",
+                           dest="debug",
+                           default=False,
+                           action="store_true",
+                           help="enable debug mode")
 
-    debugroup.add_argument("--debugip", 
-                        dest="debugip",
-                        default=socket.gethostbyname(socket.gethostname()),
-                        action="store",
-                        help="Local IP address to listen for debugger connections (default={0})".format(socket.gethostbyname(socket.gethostname())))
+    debugroup.add_argument("--debugip",
+                           dest="debugip",
+                           default=socket.gethostbyname(socket.gethostname()),
+                           action="store",
+                           help="Local IP address to listen for debugger connections (default={0})".format(socket.gethostbyname(socket.gethostname())))
 
-    debugroup.add_argument("--debugport", 
-                        dest="debugport",
-                        default=5678,
-                        action="store",
-                         help="TCP port to listen for debugger connections (default=5678)")
-   
-    
+    debugroup.add_argument("--debugport",
+                           dest="debugport",
+                           default=5678,
+                           action="store",
+                           help="TCP port to listen for debugger connections (default=5678)")
+
     loggroup = parser.add_argument_group("log")
 
-    loggroup.add_argument("--logfile", 
-                        dest="logfile",
-                        default="netatmo-weather.log",
-                        type=str,
-                        action="store",
-                        help="specifies logfile path")
+    loggroup.add_argument("--logfile",
+                          dest="logfile",
+                          default="netatmo-weather.log",
+                          type=str,
+                          action="store",
+                          help="specifies logfile path")
 
     loggroup = parser.add_argument_group("config")
 
-    loggroup.add_argument("--configfile", 
-                        dest="configfile",
-                        default="netatmo.cfg",
-                        type=str,
-                        action="store",
-                        help="specifies plugin configuration file path")
+    loggroup.add_argument("--configfile",
+                          dest="configfile",
+                          default="netatmo.cfg",
+                          type=str,
+                          action="store",
+                          help="specifies plugin configuration file path")
 
     args = parser.parse_args()
 
@@ -440,7 +440,7 @@ if __name__ == "__main__":
     """
     logging.getLogger().setLevel(logging.DEBUG)
     logging.basicConfig(filename=args.logfile,
-                        filemode='w', 
+                        filemode='w',
                         level=logging.DEBUG,
                         format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',)
