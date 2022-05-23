@@ -72,27 +72,34 @@ Da das Plugin jedesmal eine neue / frische Anmeldung bei Netatmo durchführt, f�
 
 ## Troubleshooting
 
-Sollte das Plugin nicht funktionieren oder nicht die gewünschten Daten an den Loxone Miniserver senden, kann für das Troubleshooting eine SSH-Verbindung (<a href="https://www.loxwiki.eu/pages/viewpage.action?pageId=12091660" target="_blank">Eine SSH-Verbindung mit putty aufbauen / Shell-Zugriff</a>) auf den Loxberry aufgebaut werden und folgende Befehle ausgeführt werden um den Fehler einzugrenzen:
+### Step 1: Check Logfile in Loxberry WebUI
+
+Navigate to "Log Manager" -> "More Logfiles" -> "Netatmo Weather (Plugin Log)" and check the logfile for error messages.
+
+### Step 2: Execute plugin locally using SSH connection
+
+Open an SSH connection to your Loxberry and execute the following command:
 
 `python3 /opt/loxberry/data/plugins/netatmo-weather/netatmo.py --logfile=$LBPLOG/netatmo-weather/netatmo-weather.log --configfile=$LBPCONFIG/netatmo-weather/netatmo.cfg`
 
-Steht in der Ausgabe sinngemäß etwas von "HTTPSConnectionPool(host='auth.netatmo.com', p ort=443): Max retries exceeded" ist euer Account wegen zu vielen Fehlversuchen gesperrt. Dann einfach über den Web-Browser bei Netatmo anmelden und den Account entsperren.
+If python specific errors occur, they will be displayed in the console.
 
-Erscheint eine Meldung sinngemäß "KeyError: 'battery_percent'" (kann auch etwas anderes als battery_percent) sein, klappt die Verbindung zur Netatmo API, aber in der Antwort fehlen gewisse Werte. Dann mit folgendem Befehl weitermachen:
+To see the raw JSON data returned from the Netatmo getstationdata() API execute the following command:
 
-`python3 /opt/loxberry/data/plugins/netatmo-weather/netatmo_APIBody.py | jq`
+`python3 /opt/loxberry/data/plugins/netatmo-weather/netatmo.py --logfile=$LBPLOG/netatmo-weather/netatmo-weather.log --configfile=$LBPCONFIG/netatmo-weather/netatmo.cfg --apibody` 
 
-Dieser zeigt 1:1 die Daten, welche Netatmo liefert als JSON Struktur an. Prüft dann hier, ob der Wert der als 'KeyError' gemeldet wurde, hierin enthalten ist (vermutlich nicht). Dann bitte die Ausgabe im Forum posten. Details dazu im Abschnitt "Feedback und Diskussion".
+If you experience any problems with please continue with section "Feedback and Discussion".
 
-## Feedback und Diskussion
+## ## Feedback & Discussion
 
-Das PlugIn wird von mir noch weiterentwickelt und ich freue mich über Anregungen und Feedback. Hierzu habe ich im Loxforum einen Thread eröffnet:
+This plugin will be improved over time and feedback is appreciated. Therefore I created a thread in the LoxForum:
 
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
-- 2021-12-29 Release 2.0.5 - PRE-RELEASE: added next-hop URL after authentication for stability issues, if account has also Netatmo Welcome Cameras enabled
-- 2020-12-27 Release 2.0.4 - RELEASE: Various bug fixings, beginning of general.json, implemented logging to log file
+- 2022-05-22 Release 2.0.6 - RELEASE: fixed authentication change from Netatmo, added --apibody commandline argument
+- 2021-12-29 Release 2.0.5 - added next-hop URL after authentication for stability issues, if account has also Netatmo Welcome Cameras enabled
+- 2020-12-27 Release 2.0.4 - Various bug fixings, beginning of general.json, implemented logging to log file
 - 2020-12-24 Release 2.0.3 - Fixed bug causing configuration-loss during upgrade, implemented auto-update
 - 2020-12-23 Release 2.0.2 - Changed from station_name to home_name because of API change by Netatmo
 - 2019-12-30 Release 2.0.1 - Support für Loxberry 2.0 (getestet auf 2.0.0.4)
