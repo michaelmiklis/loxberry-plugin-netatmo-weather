@@ -187,6 +187,13 @@ def main(args):
     netatmodata = json.loads(req.text)
 
     """
+    Check if running in apibody
+    """
+    if args.apibody:
+        print(json.dumps(netatmodata, indent=4, sort_keys=True))
+        sys.exit(0)
+
+    """
     Loop for each station and module
     """
     for device in netatmodata["body"]["devices"]:
@@ -432,6 +439,14 @@ if __name__ == "__main__":
                           type=str,
                           action="store",
                           help="specifies plugin configuration file path")
+
+    debugroup = parser.add_argument_group("apibody")
+
+    debugroup.add_argument("--apibody",
+                           dest="apibody",
+                           default=False,
+                           action="store_true",
+                           help="output JSON response from Netatmo API")
 
     args = parser.parse_args()
 
