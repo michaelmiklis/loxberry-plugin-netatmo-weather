@@ -9,7 +9,8 @@ import requests
 from lxml import html
 import urllib.parse
 import logging
-
+import pickle
+from datetime import datetime
 
 def main(args):
     """
@@ -93,66 +94,89 @@ def main(args):
     start new request session
     """
     session = requests.Session()
-
+  
     """
     set User-Agent to emulate Windows 10 / IE 11
     """
-    session.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'}
+    #session.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko'}
+    session.headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.1 Safari/605.1.15'}
 
-    """
-    connect to netatmo website and grab a session cookie
-    """
-    req = session.get("https://auth.netatmo.com/en-us/access/login")
-
-    if req.status_code != 200:
-        logging.error("Unable to contact https://auth.netatmo.com/en-us/access/login")
-        logging.critical("Error: {0}".format(req.status_code))
-        sys.exit(-1)
+    if not os.path.exists(os.path.join(Config.Loxberry("LBPDATA"), "netatmo-weather/netatmo-weather.cookie")):
+        logging.info("No session cookie file found. {0}".format(os.path.join(Config.Loxberry("LBPDATA"), "netatmo-weather/netatmo-weather.cookie")))
+    
     else:
-        logging.info("Successfully got session cookie from https://auth.netatmo.com/en-us/access/login")
+        with open(os.path.join(Config.Loxberry("LBPDATA"), "netatmo-weather/netatmo-weather.cookie"), 'rb') as file:
+            session.cookies.update(pickle.load(file))
 
     """
-    check if we got a valid session cookie
+    perform logon if cookie has expired
     """
-    req = session.get("https://auth.netatmo.com/access/csrf")
+    authRequired = False
 
-    if req.text.startswith("{\"token\":\"") == False:
-        logging.critical("No _token value found in response from https://auth.netatmo.com/access/csrf")
-        sys.exit(-1)
-    else:
-        csrf = json.loads(req.text)
-        token = csrf["token"]
-        logging.info("Found _token value {0} in response from https://auth.netatmo.com/access/csrf".format(token))
+    if not session.cookies:
+        authRequired = True
 
-    """
-    build the payload for authentication
-    """
-    payload = {'email': username,
-               'password': password,
-               '_token': token}
+    for cookie in session.cookies:
+       if cookie.expires: # checking the expires flag
+            if cookie.expires <= int(time.time()):
+                authRequired = True
 
-    param = {'next_url': 'https://my.netatmo.com/app/station/'}
+    if authRequired == True:
+        """
+        connect to netatmo website and grab a session cookie
+        """
+        req = session.get("https://auth.netatmo.com/en-us/access/login")
 
-    """
-    login and grab an access token
-    """
-    req = session.post("https://auth.netatmo.com/access/postlogin", params=param, data=payload)
+        if req.status_code != 200:
+            logging.error("Unable to contact https://auth.netatmo.com/en-us/access/login")
+            logging.critical("Error: {0}".format(req.status_code))
+            sys.exit(-1)
+        else:
+            logging.info("Successfully got session cookie from https://auth.netatmo.com/en-us/access/login")
 
-    if req.status_code != 200:
-        logging.error("Unable to contact https://auth.netatmo.com/access/postlogin")
-        logging.critical("Error: {0}".format(req.status_code))
-        sys.exit(-1)
-    else:
-        logging.info("Successfully logged in using username {0} and password {1} to https://auth.netatmo.com/access/postlogin".format(username, "xxxxxxxxxx"))
+        """
+        check if we got a valid session cookie
+        """
+        req = session.get("https://auth.netatmo.com/access/csrf")
 
-    """
-    check if we got a valid access token
-    """
-    if session.cookies.get("netatmocomaccess_token") is None:
-        logging.critical("No netatmocomaccess_token value found in session cookie - probably wrong username/password")
-        sys.exit(-1)
-    else:
-        logging.info("Found netatmocomaccess_token value {0} in response from https://auth.netatmo.com/access/postlogin".format(session.cookies.get("netatmocomaccess_token")))
+        if req.text.startswith("{\"token\":\"") == False:
+            logging.critical("No _token value found in response from https://auth.netatmo.com/access/csrf")
+            sys.exit(-1)
+        else:
+            csrf = json.loads(req.text)
+            token = csrf["token"]
+            logging.info("Found _token value {0} in response from https://auth.netatmo.com/access/csrf".format(token))
+
+        """
+        build the payload for authentication
+        """
+        payload = {'email': username,
+                'password': password,
+                '_token': token}
+
+        param = {'next_url': 'https://my.netatmo.com/app/station/'}
+
+        """
+        login and grab an access token
+        """
+        req = session.post("https://auth.netatmo.com/access/postlogin", params=param, data=payload)
+
+        if req.status_code != 200:
+            logging.error("Unable to contact https://auth.netatmo.com/access/postlogin")
+            logging.critical("Error: {0}".format(req.status_code))
+            sys.exit(-1)
+        else:
+            logging.info("Successfully logged in using username {0} and password {1} to https://auth.netatmo.com/access/postlogin".format(username, "xxxxxxxxxx"))
+
+        """
+        check if we got a valid access token
+        """
+        if session.cookies.get("netatmocomaccess_token") is None:
+            logging.critical("No netatmocomaccess_token value found in session cookie - probably wrong username/password")
+            sys.exit(-1)
+        else:
+            logging.info("Found netatmocomaccess_token value {0} in response from https://auth.netatmo.com/access/postlogin".format(session.cookies.get("netatmocomaccess_token")))
+
 
     """
     build the payload for reading data
@@ -160,7 +184,13 @@ def main(args):
     payload = {'access_token': urllib.parse.unquote(session.cookies.get("netatmocomaccess_token"))}
 
     """
-    # query device list to get current measurements
+    save session cookie to file
+    """
+    with open(os.path.join(Config.Loxberry("LBPDATA"), "netatmo-weather/netatmo-weather.cookie"), 'wb') as file:
+        pickle.dump(session.cookies, file)
+
+    """
+    query device list to get current measurements
     """
     req = session.post("https://api.netatmo.com/api/getstationsdata", data=payload)
 
@@ -383,6 +413,7 @@ def sendudp(data, destip, destport):
 class Config:
     __loxberry = {
         "LBSCONFIG": os.getenv("LBSCONFIG", os.getcwd()),
+        "LBPDATA": os.getenv("LBPDATA", os.getcwd()),
     }
 
     @staticmethod
