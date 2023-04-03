@@ -97,7 +97,8 @@ This plugin will be improved over time and feedback is appreciated. Therefore I 
 <a href="https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin">https://www.loxforum.com/forum/projektforen/loxberry/plugins/86373-loxberry-netatmo-weather-plugin</a>
 
 ## Change-Log
-- 2022-05-22 Release 2.0.6 - RELEASE: fixed authentication change from Netatmo, added --apibody commandline argument
+- 2023-03-30 Release 2.0.7 - RELEASE: implemented persistent session cookies to eliminate login email messages
+- 2022-05-22 Release 2.0.6 - fixed authentication change from Netatmo, added --apibody commandline argument
 - 2021-12-29 Release 2.0.5 - added next-hop URL after authentication for stability issues, if account has also Netatmo Welcome Cameras enabled
 - 2020-12-27 Release 2.0.4 - Various bug fixings, beginning of general.json, implemented logging to log file
 - 2020-12-24 Release 2.0.3 - Fixed bug causing configuration-loss during upgrade, implemented auto-update
