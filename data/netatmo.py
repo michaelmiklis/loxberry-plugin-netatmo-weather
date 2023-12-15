@@ -228,6 +228,10 @@ def main(args):
     """
     for device in netatmodata["body"]["devices"]:
 
+        # add id as name for unnamed modules
+        if 'module_name' not in device.keys():
+            device["module_name"] = "{0}_{1}".format(device["type"], device["_id"].replace(":", "").upper())
+
         """
         Get WiFi Signal
         """
