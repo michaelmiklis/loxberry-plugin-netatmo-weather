@@ -19,7 +19,7 @@ def main(args):
     if args.debug:
         import debugpy
         print("running in debug mode - waiting for debugger connection on {0}:{1}".format(args.debugip, args.debugport))
-        debugpy.listen((args.debugip, args.debugport))
+        debugpy.listen((args.debugip, int(args.debugport)))
         debugpy.wait_for_client()
 
     """
@@ -303,6 +303,10 @@ def main(args):
 
                 # loop for each module
                 for module in device["modules"]:
+
+                    # add id as name for unnamed modules
+                    if 'module_name' not in module.keys():
+                        module["module_name"] = "{0}_{1}".format(module["type"], module["_id"].replace(":", "").upper())
 
                     """
                     Get battery level
