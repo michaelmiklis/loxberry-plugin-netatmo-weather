@@ -14,11 +14,23 @@ Zuhause.Wohnzimmer.Humidity=56
 
 ## Beispiel
 
-Die UDP Pakete werden wie im Screenshot ersichtlich einzeln an den Miniserver gesendet:
+Damit die UDP Pakete im Miniserver empfangen werden können, muss zuerst beim Miniserver in den Virtuellen Eingängen ein Virtueller UDP Eingang angelegt werden.
+Der Virtuelle Eingang muss den gleichen UDP Empfangsport haben, der auch im Loxberry Plugin definiert wurde.
+
+![image](https://github.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/13720171/3f918381-2d06-43ea-a9fb-9d6b4479fa72)
+
+![image](https://github.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/13720171/e4a43056-6a52-441d-97f9-22abcb7f73a5)
+
+Die UDP Pakete werden dann wie im Screenshot ersichtlich einzeln - alle 5 Minuten - an den Miniserver gesendet, dort empfangen und können via UDP Monitor angezeigt werden:
+
+![image](https://github.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/13720171/5f1e5b97-0d1c-423c-ac1c-3593bf74e4f6)
 
 <img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/UDP-Monitor-1024x308.png" alt="UDP-Monitor" width="960" height="289"/>
 
-Hierzu kann ein virtueller UDP Befehl angelegt werden mit folgender Befehlserkennung:
+Um dann einen Wert in der Loxone Config zu verwenden, kann ein virtueller UDP Eingang Befehl angelegt werden. Mit folgender Befehlserkennung:
+
+![image](https://github.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/13720171/1663673f-20d8-4371-a61a-8340183c455c)
+
 <img src="https://raw.githubusercontent.com/michaelmiklis/loxberry-plugin-netatmo-weather/assets/UDP-Befehl-1024x743.png" alt="UDP-Befehl" width="640" height="464" />
 
 ## Batterie-Level
